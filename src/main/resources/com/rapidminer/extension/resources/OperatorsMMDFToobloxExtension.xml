@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<operators name="mmdf_tooblox_extension" version="6.0" docbundle="com/rapidminer/extension/resources/i18n/OperatorsDocMMDFToobloxExtension">
+    <group key="">
+        <!-- This is an example how to specify Operators and Operator groups. The Operator groups define
+                where Operators will be located in the Operator tree. -->
+
+        <group key="crexdata">
+           <operator>
+              <key>mmdf_source_operator</key>
+              <class>crexdata.mmdf_toolbox.MmdfSourceOperator</class>
+           </operator>
+            <operator>
+                <key>mmdf_join_operator</key>
+                <class>crexdata.mmdf_toolbox.MmdfJoinOperator</class>
+            </operator>
+         </group>
+
+    </group>
+</operators>
