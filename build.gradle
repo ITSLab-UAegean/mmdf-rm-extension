@@ -5,13 +5,14 @@ buildscript {
 	}
 }
 
-plugins { id 'com.rapidminer.extension' version '1.0.7' }
+plugins { id 'com.rapidminer.extension' version '1.0.7'}
 
 // Define Maven artifact repositories
 repositories {
     mavenCentral()
     maven { url 'https://maven.rapidminer.com/content/groups/public/' }
 }
+
 
 extensionConfig {
 
@@ -45,11 +46,24 @@ extensionConfig {
     // define RapidMiner version and extension dependencies
     dependencies {
         rapidminer '10.1.1'
-        //extension namespace: 'text', version: '10.0.0'
+//        extension namespace: 'text', version: '10.1.1'
     }
 }
 
+//shadowJar {
+//    archiveClassifier.set('all')  // e.g., your-jar-all.jar
+//}
+
 // Define third party library dependencies
 dependencies {
-	//compile 'com.google.guava:guava:26.0'
+    // Kafka client core
+    compileOnly files('libs/rmx_kafka_connector-0.4.0.jar')
+    compileOnly files('libs/rmx_text-10.1.0.jar')
+    implementation 'org.apache.kafka:kafka-streams:3.7.1'
+    implementation files("libs/mmdf-kstreams-fat.jar")
+
+}
+
+afterEvaluate {
+    jar.manifest.attributes("Plugin-Dependencies" : "rmx_text[10.1.0];rmx_kafka_connector[0.4.0]")
 }

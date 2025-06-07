@@ -1,0 +1,12 @@
+<plugin>
+    <id>org.aegean.fusion</id>
+    <class>org.aegean.fusion.FusionPlugin</class>
+
+    <security>
+        <permissions>
+            <permission class="java.lang.RuntimePermission">
+                loadLibrary.*
+            </permission>
+        </permissions>
+    </security>
+</plugin>

@@ -13,6 +13,10 @@
                 <key>mmdf_join_operator</key>
                 <class>crexdata.mmdf_toolbox.MmdfJoinOperator</class>
             </operator>
+            <operator>
+                <key>mmdf_fusion_operator</key>
+                <class>crexdata.mmdf_toolbox.MmdfFusionNodeOperator</class>
+            </operator>
          </group>
 
     </group>
