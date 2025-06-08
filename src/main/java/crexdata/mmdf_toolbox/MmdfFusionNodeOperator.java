@@ -22,6 +22,9 @@
  */
 package crexdata.mmdf_toolbox;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rapidminer.connection.configuration.ConnectionConfiguration;
 import com.rapidminer.connection.util.ConnectionInformationSelector;
 import com.rapidminer.operator.Operator;
@@ -113,18 +116,10 @@ public class MmdfFusionNodeOperator extends Operator {
 
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
-//        props.put("default.key.serde", "org.apache.kafka.common.serialization.Serdes$StringSerde");
-//        props.put("default.value.serde", "org.apache.kafka.common.serialization.Serdes$StringSerde");
-//        props.remove("default.key.serde");
-//        props.remove("default.value.serde");
 
-//        props.put(StreamsConfig.STATE_DIR_CONFIG, "/your/extension/writable/dir");
         props.put("state.dir", "/Users/giannis/.AltairRapidMiner/AI Studio/shared\n");
         // SASL/SSL security configurations
         props.put("sasl.mechanism", "PLAIN");       // SASL mechanism (use PLAIN or other if configured differently)
-        //props.put("sasl.mechanism",connConfig.getValue("cluster_config.scram_level"));
-
-
 
         if (Objects.equals(props.get("sasl.mechanism").toString(), "SCRAM-SHA-256")){
             props.put("sasl.jaas.config",  org.apache.kafka.common.security.scram.ScramLoginModule.class.getName() +" required " +
@@ -154,32 +149,32 @@ public class MmdfFusionNodeOperator extends Operator {
         LogService.getRoot().log(Level.INFO, "MMDF Kafka -- JAVA CLASS PATH RUNTIME ");
         LogService.getRoot().log(Level.INFO,System.getProperty("java.class.path"));
 
-//        Class.forName("org.apache.kafka.common.security.plain.PlainLoginModule");
-
         AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
             createTopicsIfMissing(topics,props);
             return null;
         });
 
         try (ClassLoaderSwapper cls = ClassLoaderSwapper.withContextClassLoader(getPluginLoader()); ClassLoaderSwapper cls2 = ClassLoaderSwapper.withContextClassLoader(FusionApp.class.getClassLoader())){
-//            try (ClassLoaderSwapper cls = ClassLoaderSwapper.withContextClassLoader(getPluginLoader())){
-
-//            LogService.getRoot().log(Level.INFO,cls2.toString());
-////            cls.wait(1000);
-////            cls2.wait(1000);
-//            LogService.getRoot().log(Level.INFO,cls2.toString());
-
-
-//            String config = "{\"sources\":[{\"name\":\"ais\",\"id\":\"mmsi\",\"lon\":\"lon\",\"lat\":\"lat\",\"t\":\"timestamp\",\"expires_ms\":2147483647},{\"name\":\"ccc-position\",\"id\":\"mmsi\",\"lon\":\"lon\",\"lat\":\"lat\",\"t\":\"timestamp\",\"expires_ms\":2147483647},{\"name\":\"crex-boundaries\",\"id\":\"h3\",\"lon\":\"lon\",\"lat\":\"lat\",\"t\":\"timestamp\",\"expires_ms\":2147483647,\"type\":\"shapefile\"},{\"name\":\"crex-video\",\"id\":\"h3\",\"lon\":\"lon\",\"lat\":\"lat\",\"t\":\"timestamp\",\"expires_ms\":2147483647,\"resolution\":9,\"type\":\"video\"}],\"transformations\":[{\"source\":\"ccc-position\",\"method\":\"flatMap\",\"field\":\"h3\",\"value\":1,\"topic\":false,\"output\":\"ccc-position\"},{\"source\":\"crex-maritime-fused\",\"method\":\"filter\",\"field\":\"sog\",\"value\":0.0,\"topic\":true,\"operator\":\"gt\",\"output\":\"crexdata-maritime-fused-sog\"},{\"source\":\"crexdata-maritime-fused-sog\",\"method\":\"kplerCA\",\"field\":\"h3\",\"value\":0.0,\"topic\":true,\"output\":\"crex-maritime-ca\"}],\"relations\":[{\"type\":\"merge\",\"source_left\":\"ais\",\"source_right\":\"ccc-position\",\"output_name\":\"merged-ais-ccc-position\",\"spatial_index\":\"h3\",\"dt_ms\":10000,\"distance\":10,\"spatial_resolution\":9,\"topic\":false},{\"type\":\"join\",\"source_left\":\"merged-ais-ccc-position\",\"source_right\":\"ccc-position\",\"output_name\":\"crex-maritime-fused\",\"topic\":true,\"spatial_index\":\"h3\",\"dt_ms\":2000,\"distance\":1000,\"spatial_resolution\":9},{\"type\":\"leftJoinAsTable\",\"source_left\":\"crexdata-maritime-fused-sog\",\"source_right\":\"crex-boundaries\",\"output_name\":\"ccc-fused-shapefile\",\"spatial_index\":\"h3\",\"dt_ms\":10000,\"distance\":1000,\"spatial_resolution\":9,\"topic\":false,\"fields\":\"wkt,timestamp\"},{\"type\":\"leftJoinAsTable\",\"source_left\":\"ccc-fused-shapefile\",\"source_right\":\"crex-video\",\"output_name\":\"ccc-fused-final\",\"spatial_index\":\"h3\",\"dt_ms\":10000,\"distance\":1000,\"spatial_resolution\":9,\"topic\":true,\"fields\":\"url,timestamp\"}]}";
 
             Executors.newSingleThreadExecutor().submit(() -> {
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    String mmdf_config = doc.getTokenText();
+                    ObjectNode base = (ObjectNode) mapper.readTree(mmdf_config);
+
+                    if (base.has("payload")){
+                        FusionApp.execute(props, base.get("payload").asText(),LogService.getRoot());
+                    }else{
+                        FusionApp.execute(props, mmdf_config,LogService.getRoot());
+                    }
 
 
-                FusionApp.execute(props, doc.getTokenText(),LogService.getRoot());
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+
+
             });
-
-
-
 
         }catch (Exception e) {
             e.printStackTrace();

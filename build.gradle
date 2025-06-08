@@ -60,7 +60,11 @@ dependencies {
     compileOnly files('libs/rmx_kafka_connector-0.4.0.jar')
     compileOnly files('libs/rmx_text-10.1.0.jar')
     implementation 'org.apache.kafka:kafka-streams:3.7.1'
+
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.16.2'
+
     implementation files("libs/mmdf-kstreams-fat.jar")
+
 
 }
 

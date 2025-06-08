@@ -10,8 +10,16 @@
               <class>crexdata.mmdf_toolbox.MmdfSourceOperator</class>
            </operator>
             <operator>
+                <key>mmdf_transformer_operator</key>
+                <class>crexdata.mmdf_toolbox.MmdfTransformerOperator</class>
+            </operator>
+            <operator>
                 <key>mmdf_join_operator</key>
                 <class>crexdata.mmdf_toolbox.MmdfJoinOperator</class>
+            </operator>
+            <operator>
+                <key>mmdf_concat_operator</key>
+                <class>crexdata.mmdf_toolbox.MmdfConcatOperator</class>
             </operator>
             <operator>
                 <key>mmdf_fusion_operator</key>

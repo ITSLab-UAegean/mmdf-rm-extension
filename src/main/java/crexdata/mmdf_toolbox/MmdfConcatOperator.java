@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-public class MmdfJoinOperator extends MmdfAbstractNodeOperator {
+public class MmdfConcatOperator extends MmdfAbstractNodeOperator {
     private final InputPort source1 = getInputPorts().createPort("left");
     private final InputPort source2 = getInputPorts().createPort("right");
 
@@ -48,7 +48,7 @@ public class MmdfJoinOperator extends MmdfAbstractNodeOperator {
 
 
 
-    public MmdfJoinOperator(OperatorDescription description) throws UserError {
+    public MmdfConcatOperator(OperatorDescription description) throws UserError {
         super(description);
         getTransformer().addGenerationRule(documentPort, Document.class);
 
@@ -75,25 +75,15 @@ public class MmdfJoinOperator extends MmdfAbstractNodeOperator {
         }
 
 
-
-
-
-
-
-
         ArrayNode sources = base.putArray("sources");
         ArrayNode transformations = base.putArray("transformations");
         ArrayNode relations = base.putArray("relations");
 
 
-
-
         try {
-
             ArrayList<String> source_outputs = new ArrayList<>();
             ArrayList<String> tranformation_outputs = new ArrayList<>();
             ArrayList<String> relation_outputs = new ArrayList<>();
-
 
             docs.forEach(doc->{
 
@@ -102,18 +92,21 @@ public class MmdfJoinOperator extends MmdfAbstractNodeOperator {
                 ArrayNode doc_transformations = root.has("transformations")? (ArrayNode) root.get("transformations") : root.putArray("transformations");
                 ArrayNode doc_relations = root.has("relations")? (ArrayNode) root.get("relations") : root.putArray("relations");
 
+
                 doc_sources.elements().forEachRemaining(s->{
                     if (source_outputs.isEmpty() || !source_outputs.contains(s.get("name").asText())){
                         sources.add(s);
                         source_outputs.add(s.get("name").asText());
                     }
                 });
+
                 doc_transformations.elements().forEachRemaining(s->{
                     if (tranformation_outputs.isEmpty() || !tranformation_outputs.contains(s.get("output").asText())){
                         transformations.add(s);
                         tranformation_outputs.add(s.get("output").asText());
                     }
                 });
+
                 doc_relations.elements().forEachRemaining(s->{
                     if (relation_outputs.isEmpty() || !relation_outputs.contains(s.get("output").asText())){
                         relations.add(s);
@@ -125,19 +118,6 @@ public class MmdfJoinOperator extends MmdfAbstractNodeOperator {
 
             });
 
-            ObjectNode relation = mapper.createObjectNode();
-            relation.put("source_left",os1.get("output"));
-            relation.put("source_right",os2.get("output"));
-            this.getParameterTypes().forEach(p->{
-                try {
-                    relation.put(p.getKey(),getParameterAsString(p.getKey()));
-                } catch (UndefinedParameterError e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            relations.add(relation);
-
-
             ObjectNode top = mapper.createObjectNode();
             try {
                 top.put("output",getParameterAsString("output"));
@@ -146,8 +126,6 @@ public class MmdfJoinOperator extends MmdfAbstractNodeOperator {
                 throw new RuntimeException(e);
             }
             String config = mapper.writeValueAsString(top);
-//            outputPort.deliver(new ConfigObjectIOObject(config));
-
             documentPort.deliver( new Document(config));
 
         } catch (JsonProcessingException e) {
@@ -161,44 +139,6 @@ public class MmdfJoinOperator extends MmdfAbstractNodeOperator {
     @Override
     public List<ParameterType> getParameterTypes(){
         List<ParameterType> types = super.getParameterTypes();
-        types.add(new ParameterTypeCategory(
-                "type",
-                "This parameter defines which text is logged to the console when this operator is executed.",
-                new String[]{"merge","join","joinLatest", "joinAsTable","leftJoin","leftJoinAsTable","pass"},
-                0));
-        types.add(new ParameterTypeString(
-                "output",
-                "This parameter defines which text is logged to the console when this operator is executed.",
-                "",
-                false));
-        types.add(new ParameterTypeString(
-                "fields",
-                "comma separated, if not empty only those fields will be added to the output object",
-                true));
-        types.add(new ParameterTypeCategory(
-                "spatial index",
-                "This parameter defines which text is logged to the console when this operator is executed.",
-                new String[]{"h3"},
-                0));
-        types.add(new ParameterTypeInt(
-                "dt_ms",
-                "This parameter defines which text is logged to the console when this operator is executed.",
-                0,
-                10000));
-        types.add(new ParameterTypeInt(
-                "distance",
-                "This parameter defines which text is logged to the console when this operator is executed.",
-                1,
-                1000));
-        types.add(new ParameterTypeInt(
-                "spatial_resolution",
-                "This parameter defines which text is logged to the console when this operator is executed.",
-                8,
-                13));
-        types.add(new ParameterTypeBoolean(
-                "topic",
-                "This parameter defines which text is logged to the console when this operator is executed.",
-                false));
 
         return  types;
     }
