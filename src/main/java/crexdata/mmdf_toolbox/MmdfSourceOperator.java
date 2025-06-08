@@ -123,6 +123,11 @@ public class MmdfSourceOperator extends MmdfAbstractNodeOperator {
                 "timestamp",
                 false));
         types.add(new ParameterTypeInt(
+                "resolution",
+                "This parameter defines which text is logged to the console when this operator is executed.",
+                8,
+                13));
+        types.add(new ParameterTypeInt(
                 "expires_ms",
                 "This parameter defines which text is logged to the console when this operator is executed.",
                 0,
