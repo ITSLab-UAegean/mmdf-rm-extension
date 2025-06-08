@@ -38,10 +38,7 @@ import com.rapidminer.operator.OperatorException;
 import com.rapidminer.operator.ports.InputPort;
 import com.rapidminer.operator.ports.OutputPort;
 import com.rapidminer.operator.text.Document;
-import com.rapidminer.parameter.ParameterType;
-import com.rapidminer.parameter.ParameterTypeInt;
-import com.rapidminer.parameter.ParameterTypeString;
-import com.rapidminer.parameter.UndefinedParameterError;
+import com.rapidminer.parameter.*;
 import com.rapidminer.tools.LogService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ioobject.ConfigObjectIOObject;
@@ -106,30 +103,35 @@ public class MmdfSourceOperator extends MmdfAbstractNodeOperator {
                 "",
                 false));
         types.add(new ParameterTypeString(
-                "longitude",
+                "lon",
                 "This parameter defines which text is logged to the console when this operator is executed.",
                 "lon",
                 false));
         types.add(new ParameterTypeString(
-                "latitude",
+                "lat",
                 "This parameter defines which text is logged to the console when this operator is executed.",
                 "lat",
                 false));
         types.add(new ParameterTypeString(
-                "identifier",
+                "id",
                 "This parameter defines which text is logged to the console when this operator is executed.",
                 "id",
                 false));
         types.add(new ParameterTypeString(
-                "timestamp",
-                "This parameter defines which text is logged to the console when this operator is executed.",
                 "t",
+                "This parameter defines which text is logged to the console when this operator is executed.",
+                "timestamp",
                 false));
         types.add(new ParameterTypeInt(
                 "expires_ms",
                 "This parameter defines which text is logged to the console when this operator is executed.",
                 0,
                 600000));
+        types.add(new ParameterTypeBoolean(
+                "peek",
+                "Peek results of the steam for debugging",
+                false,
+                false));
 
         return  types;
     }

@@ -176,7 +176,7 @@ public class MmdfJoinOperator extends MmdfAbstractNodeOperator {
                 "comma separated, if not empty only those fields will be added to the output object",
                 true));
         types.add(new ParameterTypeCategory(
-                "spatial index",
+                "spatial_index",
                 "This parameter defines which text is logged to the console when this operator is executed.",
                 new String[]{"h3"},
                 0));
@@ -198,6 +198,11 @@ public class MmdfJoinOperator extends MmdfAbstractNodeOperator {
         types.add(new ParameterTypeBoolean(
                 "topic",
                 "This parameter defines which text is logged to the console when this operator is executed.",
+                false));
+        types.add(new ParameterTypeBoolean(
+                "peek",
+                "Peek results of the steam for debugging",
+                false,
                 false));
 
         return  types;

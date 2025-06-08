@@ -135,6 +135,12 @@ public class MmdfTransformerOperator extends MmdfAbstractNodeOperator{
                 false,
                 false));
 
+        types.add(new ParameterTypeBoolean(
+                "peek",
+                "Peek results of the steam for debugging",
+                false,
+                false));
+
         return  types;
     }
 

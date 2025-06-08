@@ -163,7 +163,9 @@ public class MmdfFusionNodeOperator extends Operator {
                     ObjectNode base = (ObjectNode) mapper.readTree(mmdf_config);
 
                     if (base.has("payload")){
-                        FusionApp.execute(props, base.get("payload").asText(),LogService.getRoot());
+                        String config = mapper.writeValueAsString(base.get("payload"));
+                        LogService.getRoot().log(Level.INFO,config);
+                        FusionApp.execute(props,config ,LogService.getRoot());
                     }else{
                         FusionApp.execute(props, mmdf_config,LogService.getRoot());
                     }
