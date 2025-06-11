@@ -27,31 +27,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rapidminer.connection.configuration.ConnectionConfiguration;
 import com.rapidminer.connection.util.ConnectionInformationSelector;
+import com.rapidminer.connection.valueprovider.handler.ValueProviderHandlerRegistry;
+import com.rapidminer.gui.tools.ProgressThread;
+import com.rapidminer.gui.tools.ProgressThreadStoppedException;
 import com.rapidminer.operator.Operator;
 import com.rapidminer.operator.OperatorDescription;
 import com.rapidminer.operator.OperatorException;
 import com.rapidminer.operator.ports.InputPort;
+import com.rapidminer.operator.ports.OutputPort;
 import com.rapidminer.operator.text.Document;
 import com.rapidminer.parameter.ParameterType;
 import com.rapidminer.parameter.ParameterTypeString;
 import com.rapidminer.tools.ClassLoaderSwapper;
 import com.rapidminer.tools.LogService;
-
-import org.aegean.*;
-import org.apache.kafka.clients.admin.AdminClient;
-import org.apache.kafka.clients.admin.NewTopic;
-import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.streams.StreamsConfig;
-
+import org.aegean.FusionApp;
+import shadow.org.apache.kafka.common.serialization.Serdes;
+import shadow.org.apache.kafka.streams.StreamsConfig;
 
 import java.io.IOException;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.*;
-import java.util.concurrent.Executors;
 import java.util.logging.Level;
-
-import static com.rapidminer.extension.kafka_connector.PluginInitKafkaConnector.getPluginLoader;
 
 /**
  * Calculates the sum of two integers.
@@ -60,6 +55,7 @@ import static com.rapidminer.extension.kafka_connector.PluginInitKafkaConnector.
  */
 public class MmdfFusionNodeOperator extends Operator {
     private final InputPort fusion_conf = getInputPorts().createPort("fusion_conf");
+    private final OutputPort app_id =getOutputPorts().createPort("appId");
     private final ConnectionInformationSelector connectionSelector = new ConnectionInformationSelector(this, "kafka_connector:kafka");
 
 
@@ -70,17 +66,11 @@ public class MmdfFusionNodeOperator extends Operator {
 
     @Override
     public void doWork() throws OperatorException {
-        ConnectionConfiguration connConfig = connectionSelector.getConnection().getConfiguration();
-
-//        Properties clusterConfig = KafkaConnectionHandler.getINSTANCE().buildClusterConfiguration(connConfig);
         try {
             doDefaultWork();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-//        FusionApp.main();
-
     }
 
     /***
@@ -89,26 +79,28 @@ public class MmdfFusionNodeOperator extends Operator {
      ***/
     public void doDefaultWork() throws OperatorException, IOException {
         LogService.getRoot().log(Level.INFO, "MMDF testing");
-        ConnectionConfiguration connConfig = connectionSelector.getConnection().getConfiguration();
+        Map<String, String> connConfig = ValueProviderHandlerRegistry
+                .getInstance()
+                .injectValues(connectionSelector.getConnection(), this, false);
 
         Document doc = fusion_conf.getData(com.rapidminer.operator.text.Document.class);
         LogService.getRoot().log(Level.INFO, doc.toString());
-        //connConfig.getKeyMap().forEach((x,p)-> LogService.getRoot().log(Level.INFO, x+"->"+p.getValue()));
-
 
         try {
-            Class.forName(org.apache.kafka.common.security.plain.PlainLoginModule.class.getName() );
-            Class.forName(org.apache.kafka.common.serialization.Serdes.class.getName());
-            Class.forName(org.apache.kafka.clients.admin.AdminClient.class.getName());
+            Class.forName(shadow.org.apache.kafka.common.security.plain.PlainLoginModule.class.getName() );
+            Class.forName(shadow.org.apache.kafka.common.serialization.Serdes.class.getName());
+            Class.forName(shadow.org.apache.kafka.clients.admin.AdminClient.class.getName());
 
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-
+        String app_id= "fusion-pipe-" + UUID.randomUUID();
+        Document appDoc = new Document(app_id);
+//        appDoc.setUserData("app_id",app_id);
+        this.app_id.deliver(appDoc);
         Properties props = new Properties();
-
-        props.put("application.id", "fusion-pipe-" + UUID.randomUUID());
-        props.put("bootstrap.servers", connConfig.getValue("cluster_config.host_ports"));
+        props.put("application.id",app_id );
+        props.put("bootstrap.servers", connConfig.get("cluster_config.host_ports"));
         props.put("security.protocol", "SASL_SSL");//connConfig.getValue("cluster_config.auth_method"));
 //        props.put("default.key.serde", Serdes.StringSerde.class);
 //        props.put("default.value.serde", Serdes.StringSerde.class);
@@ -122,24 +114,25 @@ public class MmdfFusionNodeOperator extends Operator {
         props.put("sasl.mechanism", "PLAIN");       // SASL mechanism (use PLAIN or other if configured differently)
 
         if (Objects.equals(props.get("sasl.mechanism").toString(), "SCRAM-SHA-256")){
-            props.put("sasl.jaas.config",  org.apache.kafka.common.security.scram.ScramLoginModule.class.getName() +" required " +
-                    "username=\"" +  connConfig.getValue("cluster_config.username") + "\" password=\"" + connConfig.getValue("cluster_config.password")+ "\";"); // JAAS login configuration
+            props.put("sasl.jaas.config",  shadow.org.apache.kafka.common.security.scram.ScramLoginModule.class.getName() +" required " +
+                    "username=\"" +  connConfig.get("cluster_config.username") + "\" password=\"" + connConfig.get("cluster_config.password")+ "\";"); // JAAS login configuration
 
         }else{
-            props.put("sasl.jaas.config", org.apache.kafka.common.security.plain.PlainLoginModule.class.getName() +" required " +
-                    "username=\"" +  connConfig.getValue("cluster_config.username") + "\" password=\"" + connConfig.getValue("cluster_config.password")+ "\";"); // JAAS login configuration
-
+            props.put("sasl.jaas.config", shadow.org.apache.kafka.common.security.plain.PlainLoginModule.class.getName() +" required " +
+                    "username=\"" +  connConfig.get("cluster_config.username") + "\" password=\"" + connConfig.get("cluster_config.password")+ "\";"); // JAAS login configuration
         }
-        props.put("ssl.truststore.location", connConfig.getValue("cluster_config.ssl_trust_store_location")); // Path to your truststore
-        props.put("ssl.truststore.password", connConfig.getValue("cluster_config.ssl_trust_store_password"));      // Truststore password
-        props.put("ssl.keystore.location", connConfig.getValue("cluster_config.ssl_key_store_location"));     // Path to your keystore
-        props.put("ssl.keystore.password", connConfig.getValue("cluster_config.ssl_key_store_password"));          // Keystore password
+        props.put("ssl.truststore.location", connConfig.get("cluster_config.ssl_trust_store_location")); // Path to your truststore
+        props.put("ssl.truststore.password", connConfig.get("cluster_config.ssl_trust_store_password"));      // Truststore password
+        props.put("ssl.keystore.location", connConfig.get("cluster_config.ssl_key_store_location"));     // Path to your keystore
+        props.put("ssl.keystore.password", connConfig.get("cluster_config.ssl_key_store_password"));          // Keystore password
 
-        props.put("ssl.key.password",connConfig.getValue("cluster_config.ssl_trust_store_password"));
+        props.put("ssl.key.password",connConfig.get("cluster_config.ssl_trust_store_password"));
         props.put("commit.interval.ms", 10);
         props.put("linger.ms", 5);
         props.put("batch.size", 1024*2);
         props.put("auto.offset.reset", "latest");
+
+
 
         LogService.getRoot().log(Level.INFO, "MMDF Kafka -- Connection info accepted ");
         LogService.getRoot().log(Level.INFO, props.toString());
@@ -149,39 +142,63 @@ public class MmdfFusionNodeOperator extends Operator {
         LogService.getRoot().log(Level.INFO, "MMDF Kafka -- JAVA CLASS PATH RUNTIME ");
         LogService.getRoot().log(Level.INFO,System.getProperty("java.class.path"));
 
-        AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
-            createTopicsIfMissing(topics,props);
-            return null;
-        });
 
-        try (ClassLoaderSwapper cls = ClassLoaderSwapper.withContextClassLoader(getPluginLoader()); ClassLoaderSwapper cls2 = ClassLoaderSwapper.withContextClassLoader(FusionApp.class.getClassLoader())){
+            ProgressThread thread = new ProgressThread("mmdf-kstreams:"+app_id) {
 
-            Executors.newSingleThreadExecutor().submit(() -> {
-                ObjectMapper mapper = new ObjectMapper();
-                try {
-                    String mmdf_config = doc.getTokenText();
-                    ObjectNode base = (ObjectNode) mapper.readTree(mmdf_config);
 
-                    if (base.has("payload")){
-                        String config = mapper.writeValueAsString(base.get("payload"));
-                        LogService.getRoot().log(Level.INFO,config);
-                        FusionApp.execute(props,config ,LogService.getRoot());
-                    }else{
-                        FusionApp.execute(props, mmdf_config,LogService.getRoot());
+                @Override
+                public void run() {
+                    try (ClassLoaderSwapper cls2 = ClassLoaderSwapper.withContextClassLoader(FusionApp.class.getClassLoader())) {
+
+                        ObjectMapper mapper = new ObjectMapper();
+                    try {
+                        String mmdf_config = doc.getTokenText();
+                        ObjectNode base = (ObjectNode) mapper.readTree(mmdf_config);
+
+
+                        if (base.has("payload")) {
+                            ObjectNode payload = (ObjectNode) base.get("payload");
+
+                            if (!payload.has("transformations")){
+                                payload.putArray("transformations");
+                            }
+                            if (!payload.has("relations")){
+                                payload.putArray("relations");
+                            }
+
+                            String config = mapper.writeValueAsString(payload);
+
+                            LogService.getRoot().log(Level.INFO, config);
+                            FusionApp.execute(props, config, LogService.getRoot(),this::checkCancelled);
+                        } else {
+
+                            if (!base.has("transformations")){
+                                base.putArray("transformations");
+                            }
+                            if (!base.has("relations")){
+                                base.putArray("relations");
+                            }
+                            FusionApp.execute(props, mmdf_config, LogService.getRoot(),this::checkCancelled);
+                        }
+
+
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    } catch (ProgressThreadStoppedException e) {
+                        LogService.getRoot().log(Level.INFO, "MMDF Kafka -- EXECUTION STOPPED");
                     }
 
-
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                        throw new RuntimeException("Failed to execute MMDF", e);
+                    }
                 }
 
 
-            });
+        };
+            thread.start();
 
-        }catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to execute MMDF", e);
-        }
+
 
     }
 
@@ -201,26 +218,4 @@ public class MmdfFusionNodeOperator extends Operator {
     }
 
 
-    public static void createTopicsIfMissing(Collection<String> topicNames, Properties kafkaProps) {
-
-
-        try (ClassLoaderSwapper cls = ClassLoaderSwapper.withContextClassLoader(getPluginLoader());AdminClient adminClient = AdminClient.create(kafkaProps)) {
-            Set<String> existingTopics = adminClient.listTopics().names().get();
-            List<NewTopic> topicsToCreate = new ArrayList<>();
-
-            for (String topic : topicNames) {
-                if (!existingTopics.contains(topic)) {
-                    topicsToCreate.add(new NewTopic(topic, 1, (short) 1)); // Adjust partitions and replication as needed
-                }
-            }
-
-            if (!topicsToCreate.isEmpty()) {
-                adminClient.createTopics(topicsToCreate).all().get();
-                System.out.println("Created missing topics: " + topicsToCreate);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to create topics", e);
-        }
-    }
 }

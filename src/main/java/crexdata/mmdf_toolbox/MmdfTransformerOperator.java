@@ -23,7 +23,6 @@
 package crexdata.mmdf_toolbox;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -34,10 +33,7 @@ import com.rapidminer.operator.ports.OutputPort;
 import com.rapidminer.operator.text.Document;
 import com.rapidminer.parameter.*;
 import com.rapidminer.tools.LogService;
-import ioobject.ConfigObjectIOObject;
-import org.apache.kafka.common.protocol.types.Field;
 
-import javax.print.Doc;
 import java.util.List;
 import java.util.logging.Level;
 
