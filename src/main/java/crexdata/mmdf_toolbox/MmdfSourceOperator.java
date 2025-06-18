@@ -21,27 +21,21 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 package crexdata.mmdf_toolbox;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.rapidminer.adaption.belt.IOTable;
-import com.rapidminer.belt.table.Table;
-import com.rapidminer.connection.ConnectionInformation;
-import com.rapidminer.connection.util.ConnectionInformationSelector;
-import com.rapidminer.operator.Operator;
 import com.rapidminer.operator.OperatorDescription;
 import com.rapidminer.operator.OperatorException;
-import com.rapidminer.operator.ports.InputPort;
 import com.rapidminer.operator.ports.OutputPort;
 import com.rapidminer.operator.text.Document;
 import com.rapidminer.parameter.*;
 import com.rapidminer.tools.LogService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import ioobject.ConfigObjectIOObject;
+
+import java.util.List;
+import java.util.logging.Level;
 
 
 public class MmdfSourceOperator extends MmdfAbstractNodeOperator {

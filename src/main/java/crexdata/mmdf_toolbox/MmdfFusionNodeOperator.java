@@ -25,7 +25,6 @@ package crexdata.mmdf_toolbox;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.rapidminer.connection.configuration.ConnectionConfiguration;
 import com.rapidminer.connection.util.ConnectionInformationSelector;
 import com.rapidminer.connection.valueprovider.handler.ValueProviderHandlerRegistry;
 import com.rapidminer.gui.tools.ProgressThread;
