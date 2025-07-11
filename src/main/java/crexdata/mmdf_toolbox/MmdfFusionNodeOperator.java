@@ -188,8 +188,7 @@ public class MmdfFusionNodeOperator extends Operator {
                     }
 
                     }catch (Exception e) {
-                        e.printStackTrace();
-                        throw new RuntimeException("Failed to execute MMDF", e);
+                        throw new RuntimeException("Failed to execute MMDF"+ e.getMessage());
                     }
                 }
 
