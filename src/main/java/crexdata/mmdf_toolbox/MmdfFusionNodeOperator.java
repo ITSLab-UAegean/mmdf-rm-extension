@@ -107,8 +107,7 @@ public class MmdfFusionNodeOperator extends Operator {
 
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
-
-        props.put("state.dir", "/Users/giannis/.AltairRapidMiner/AI Studio/shared\n");
+        props.put("state.dir", "/Users/"+System.getProperty("user.name")+"/.AltairRapidMiner/AI Studio/shared\n");
         // SASL/SSL security configurations
         props.put("sasl.mechanism", "PLAIN");       // SASL mechanism (use PLAIN or other if configured differently)
 
