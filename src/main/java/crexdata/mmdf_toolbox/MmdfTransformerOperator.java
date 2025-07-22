@@ -33,6 +33,7 @@ import com.rapidminer.operator.ports.OutputPort;
 import com.rapidminer.operator.text.Document;
 import com.rapidminer.parameter.*;
 import com.rapidminer.tools.LogService;
+import crexdata.mmdf_toolbox.utils.ParameterDescriptionEnum;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -121,19 +122,19 @@ public class MmdfTransformerOperator extends MmdfAbstractNodeOperator{
                 false));
         types.add(new ParameterTypeString(
                 "output",
-                "Output stream name",
+                ParameterDescriptionEnum.OUTPUT_NAME.getLabel(),
                 this.getName(),
                 false));
 
         types.add(new ParameterTypeBoolean(
                 "topic",
-                "Selects whether the stream will materialize into a kafka topic",
+                ParameterDescriptionEnum.TOPIC.getLabel(),
                 false,
                 false));
 
         types.add(new ParameterTypeBoolean(
                 "peek",
-                "Peek results of the steam for debugging",
+                ParameterDescriptionEnum.PEEK.getLabel(),
                 false,
                 false));
 

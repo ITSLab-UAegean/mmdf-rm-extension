@@ -34,6 +34,7 @@ import com.rapidminer.operator.ports.OutputPort;
 import com.rapidminer.operator.text.Document;
 import com.rapidminer.parameter.*;
 import com.rapidminer.tools.LogService;
+import crexdata.mmdf_toolbox.utils.ParameterDescriptionEnum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -168,12 +169,12 @@ public class MmdfJoinOperator extends MmdfAbstractNodeOperator {
                 0));
         types.add(new ParameterTypeString(
                 "output",
-                "This parameter defines which text is logged to the console when this operator is executed.",
-                "",
+                ParameterDescriptionEnum.OUTPUT_NAME.getLabel(),
+               "",
                 false));
         types.add(new ParameterTypeString(
                 "fields",
-                "comma separated, if not empty only those fields will be added to the output object",
+                "A comma separated value of fields that will be copied to the result, if  empty all fields are copied",
                 true));
         types.add(new ParameterTypeCategory(
                 "spatial_index",
@@ -182,26 +183,26 @@ public class MmdfJoinOperator extends MmdfAbstractNodeOperator {
                 0));
         types.add(new ParameterTypeInt(
                 "dt_ms",
-                "This parameter defines which text is logged to the console when this operator is executed.",
+                ParameterDescriptionEnum.DT_MS.getLabel(),
                 0,
                 10000));
         types.add(new ParameterTypeInt(
                 "distance",
-                "This parameter defines which text is logged to the console when this operator is executed.",
+                ParameterDescriptionEnum.DISTANCE_METERS.getLabel(),
                 1,
                 1000));
         types.add(new ParameterTypeInt(
                 "spatial_resolution",
-                "This parameter defines which text is logged to the console when this operator is executed.",
+                ParameterDescriptionEnum.H3_RESOLUTION.getLabel(),
                 8,
                 13));
         types.add(new ParameterTypeBoolean(
                 "topic",
-                "This parameter defines which text is logged to the console when this operator is executed.",
+                ParameterDescriptionEnum.TOPIC.getLabel(),
                 false));
         types.add(new ParameterTypeBoolean(
                 "peek",
-                "Peek results of the steam for debugging",
+                ParameterDescriptionEnum.PEEK.getLabel(),
                 false,
                 false));
 

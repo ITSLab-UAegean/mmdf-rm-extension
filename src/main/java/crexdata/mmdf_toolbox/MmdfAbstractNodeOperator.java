@@ -50,6 +50,6 @@ public class MmdfAbstractNodeOperator extends Operator {
 
 
     public void doDefaultWork() throws OperatorException {
-        LogService.getRoot().log(Level.INFO,"MMDF testing");
+        LogService.getRoot().log(Level.INFO,"MMDF Abstract node");
     }
 }

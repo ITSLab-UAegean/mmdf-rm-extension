@@ -23,7 +23,6 @@
 package crexdata.mmdf_toolbox;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -33,6 +32,7 @@ import com.rapidminer.operator.ports.OutputPort;
 import com.rapidminer.operator.text.Document;
 import com.rapidminer.parameter.*;
 import com.rapidminer.tools.LogService;
+import crexdata.mmdf_toolbox.utils.ParameterDescriptionEnum;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -47,27 +47,21 @@ public class MmdfSourceOperator extends MmdfAbstractNodeOperator {
 
     public MmdfSourceOperator(OperatorDescription description) {
         super(description);
-//        getTransformer().addGenerationRule(outputPort, ConfigObjectIOObject.class);
         getTransformer().addGenerationRule(documentPort, Document.class);
     }
 
     @Override
     public void doWork() throws OperatorException{
-//        ConnectionInformationSelector selector= kafka_connection.getData();
-//        ConnectionInformation connection = selector.getConnection();
 
 
         ObjectMapper mapper = new ObjectMapper();
-
         ObjectNode root = mapper.createObjectNode();
-
+        ObjectNode source = mapper.createObjectNode();
 
         ArrayNode sources = root.has("sources")? (ArrayNode) root.get("sources") : root.putArray("sources");
 
-        ObjectNode source = mapper.createObjectNode();
         this.getParameterTypes().forEach(p->{
             try {
-//                Logger.getGlobal().log(Level.INFO,"Key"+p.getKey()+" : "+this.getParameter(p.getKey()));
                 source.put(p.getKey(),this.getParameter(p.getKey()));
             } catch (UndefinedParameterError e) {
                 throw new RuntimeException(e);
@@ -93,42 +87,41 @@ public class MmdfSourceOperator extends MmdfAbstractNodeOperator {
         List<ParameterType> types = super.getParameterTypes();
         types.add(new ParameterTypeString(
                 "name",
-                "This parameter defines which text is logged to the console when this operator is executed.",
+                ParameterDescriptionEnum.INPUT_TOPIC_NAME.getLabel(),
                 "",
                 false));
         types.add(new ParameterTypeString(
                 "lon",
-                "This parameter defines which text is logged to the console when this operator is executed.",
+                ParameterDescriptionEnum.LONGITUDE.getLabel(),
                 "lon",
                 false));
         types.add(new ParameterTypeString(
                 "lat",
-                "This parameter defines which text is logged to the console when this operator is executed.",
+                ParameterDescriptionEnum.LATITUDE.getLabel(),
                 "lat",
                 false));
         types.add(new ParameterTypeString(
                 "id",
-                "This parameter defines which text is logged to the console when this operator is executed.",
+                ParameterDescriptionEnum.ID.getLabel(),
                 "id",
                 false));
         types.add(new ParameterTypeString(
                 "t",
-                "This parameter defines which text is logged to the console when this operator is executed.",
+                ParameterDescriptionEnum.TIME.getLabel(),
                 "timestamp",
                 false));
         types.add(new ParameterTypeInt(
                 "resolution",
-                "This parameter defines which text is logged to the console when this operator is executed.",
+                ParameterDescriptionEnum.H3_RESOLUTION.getLabel(),
                 8,
                 13));
         types.add(new ParameterTypeInt(
                 "expires_ms",
-                "This parameter defines which text is logged to the console when this operator is executed.",
-                0,
+                ParameterDescriptionEnum.EXPIRE_MS.getLabel(),                0,
                 600000));
         types.add(new ParameterTypeBoolean(
                 "peek",
-                "Peek results of the steam for debugging",
+                ParameterDescriptionEnum.PEEK.getLabel(),
                 false,
                 false));
 
