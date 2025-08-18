@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-package crexdata.mmdf_toolbox;
+package crexdata.mmdf.operator;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,8 +45,6 @@ public class MmdfConcatOperator extends MmdfAbstractNodeOperator {
 
 
     private OutputPort documentPort = getOutputPorts().createPort("out stream");
-
-
 
     public MmdfConcatOperator(OperatorDescription description) throws UserError {
         super(description);

@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-package crexdata.mmdf_toolbox;
+package crexdata.mmdf.operator;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,7 +32,7 @@ import com.rapidminer.operator.ports.OutputPort;
 import com.rapidminer.operator.text.Document;
 import com.rapidminer.parameter.*;
 import com.rapidminer.tools.LogService;
-import crexdata.mmdf_toolbox.utils.ParameterDescriptionEnum;
+import crexdata.mmdf.operator.utils.ParameterDescriptionEnum;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -117,7 +117,8 @@ public class MmdfSourceOperator extends MmdfAbstractNodeOperator {
                 13));
         types.add(new ParameterTypeInt(
                 "expires_ms",
-                ParameterDescriptionEnum.EXPIRE_MS.getLabel(),                0,
+                ParameterDescriptionEnum.EXPIRE_MS.getLabel(),
+                0,
                 600000));
         types.add(new ParameterTypeBoolean(
                 "peek",

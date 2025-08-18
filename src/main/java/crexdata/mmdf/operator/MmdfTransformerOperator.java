@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-package crexdata.mmdf_toolbox;
+package crexdata.mmdf.operator;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,7 +33,7 @@ import com.rapidminer.operator.ports.OutputPort;
 import com.rapidminer.operator.text.Document;
 import com.rapidminer.parameter.*;
 import com.rapidminer.tools.LogService;
-import crexdata.mmdf_toolbox.utils.ParameterDescriptionEnum;
+import crexdata.mmdf.operator.utils.ParameterDescriptionEnum;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -86,18 +86,7 @@ public class MmdfTransformerOperator extends MmdfAbstractNodeOperator{
 
         LogService.getRoot().log(Level.INFO,"MMDF testing");
     }
-
-    /*
-     {
-      "source":"crexdata-maritime-fused-sog",
-      "method":"kplerCA",
-      "field": "h3",
-      "value": 0.0,
-      "topic":true,
-      "output":"crex-maritime-ca"
-    }
-     */
-
+    
     @Override
     public List<ParameterType> getParameterTypes(){
         List<ParameterType> types = super.getParameterTypes();
@@ -118,7 +107,7 @@ public class MmdfTransformerOperator extends MmdfAbstractNodeOperator{
                 0));
         types.add(new ParameterTypeString(
                 "value",
-                "This parameter select the value to be compared against",
+                "Value the operator is applied on.",
                 false));
         types.add(new ParameterTypeString(
                 "output",

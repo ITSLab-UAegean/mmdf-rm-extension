@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-package crexdata.mmdf_toolbox;
+package crexdata.mmdf.operator;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,13 +28,12 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rapidminer.operator.OperatorDescription;
 import com.rapidminer.operator.OperatorException;
-import com.rapidminer.operator.UserError;
 import com.rapidminer.operator.ports.InputPort;
 import com.rapidminer.operator.ports.OutputPort;
 import com.rapidminer.operator.text.Document;
 import com.rapidminer.parameter.*;
 import com.rapidminer.tools.LogService;
-import crexdata.mmdf_toolbox.utils.ParameterDescriptionEnum;
+import crexdata.mmdf.operator.utils.ParameterDescriptionEnum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,10 +48,9 @@ public class MmdfJoinOperator extends MmdfAbstractNodeOperator {
 
 
 
-    public MmdfJoinOperator(OperatorDescription description) throws UserError {
+    public MmdfJoinOperator(OperatorDescription description)  {
         super(description);
         getTransformer().addGenerationRule(documentPort, Document.class);
-
     }
 
 
@@ -76,18 +74,9 @@ public class MmdfJoinOperator extends MmdfAbstractNodeOperator {
         }
 
 
-
-
-
-
-
-
         ArrayNode sources = base.putArray("sources");
         ArrayNode transformations = base.putArray("transformations");
         ArrayNode relations = base.putArray("relations");
-
-
-
 
         try {
 
@@ -161,16 +150,17 @@ public class MmdfJoinOperator extends MmdfAbstractNodeOperator {
 
     @Override
     public List<ParameterType> getParameterTypes(){
+
         List<ParameterType> types = super.getParameterTypes();
         types.add(new ParameterTypeCategory(
                 "type",
-                "This parameter defines which text is logged to the console when this operator is executed.",
+                "Type of the join",
                 new String[]{"merge","join","joinLatest", "joinAsTable","leftJoin","leftJoinAsTable","pass"},
                 0));
         types.add(new ParameterTypeString(
                 "output",
                 ParameterDescriptionEnum.OUTPUT_NAME.getLabel(),
-               "",
+               "Name of the  k-stream output topic",
                 false));
         types.add(new ParameterTypeString(
                 "fields",
@@ -178,7 +168,7 @@ public class MmdfJoinOperator extends MmdfAbstractNodeOperator {
                 true));
         types.add(new ParameterTypeCategory(
                 "spatial_index",
-                "This parameter defines which text is logged to the console when this operator is executed.",
+                ParameterDescriptionEnum.H3_RESOLUTION.getLabel(),
                 new String[]{"h3"},
                 0));
         types.add(new ParameterTypeInt(

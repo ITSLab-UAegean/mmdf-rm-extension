@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../../../../
+        rapidminerreferencemanual/documentation2html.xsl"?>
+<p1:documents xmlns:p1="http://rapid-i.com/schemas/documentation/reference/1.0"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://rapid-i.com/schemas/documentation/reference/1.0 ">
+
+    <operator key="operator.mmdf_toolbox_extension:mmdf_join_operator" name="My Join Operator" locale="en"
+              version="6.5.000">
+        <synopsis>This is an example Operator.
+            It writes to the Log View when being executed.
+        </synopsis>
+        <text>
+            <paragraph>First paragraph.</paragraph>
+            <paragraph>Second paragraph.</paragraph>
+        </text>
+<!--        <inputPorts>-->
+<!--            <port key="fusion_conf" name="fusion_conf" type="com.rapidminer.operator.text.Document">-->
+<!--                Input port description.-->
+<!--            </port>-->
+<!--        </inputPorts>-->
+<!--        <outputPorts>-->
+<!--            <port key="output" name="output" type="com.rapidminer.operator.text.Document">-->
+<!--                Output port description.-->
+<!--            </port>-->
+<!--        </outputPorts>-->
+
+<!--        &lt;!&ndash; description of the parameters and the corresponding values &ndash;&gt;-->
+<!--        <parameters>-->
+<!--            <parameter key="log_text" name="log text" type="string">-->
+<!--                Description here-->
+<!--            </parameter>-->
+<!--        </parameters>-->
+
+<!--        <differentiation>-->
+<!--            &lt;!&ndash; ... &ndash;&gt;-->
+<!--        </differentiation>-->
+
+<!--        <tutorialProcesses>-->
+<!--            <tutorialProcess key="log.test"-->
+<!--                             title="Logging custom text">-->
+<!--                <description>-->
+<!--                    <paragraph>-->
+<!--                        Tutorial description here.-->
+<!--                    </paragraph>-->
+<!--                </description>-->
+<!--                <process version="6.5.000">-->
+<!--                    ...-->
+<!--                </process>-->
+<!--            </tutorialProcess>-->
+<!--        </tutorialProcesses>-->
+    </operator>
+</p1:documents>

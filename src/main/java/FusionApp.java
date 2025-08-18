@@ -1,5 +1,5 @@
 
-import crexdata.mmdf_toolbox.MmdfFusionNodeOperator;
+import crexdata.mmdf.operator.MmdfFusionNodeOperator;
 
 
 import java.io.IOException;

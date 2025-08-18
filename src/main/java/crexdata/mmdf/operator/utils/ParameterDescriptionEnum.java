@@ -1,4 +1,4 @@
-package crexdata.mmdf_toolbox.utils;
+package crexdata.mmdf.operator.utils;
 
 public enum ParameterDescriptionEnum {
     INPUT_TOPIC_NAME("The topic name. Topic must exist in kafka cluster connected (Text)."),

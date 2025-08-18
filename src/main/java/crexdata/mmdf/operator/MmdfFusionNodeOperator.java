@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-package crexdata.mmdf_toolbox;
+package crexdata.mmdf.operator;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -65,6 +65,7 @@ public class MmdfFusionNodeOperator extends Operator {
 
     @Override
     public void doWork() throws OperatorException {
+
         try {
             doDefaultWork();
         } catch (IOException e) {
