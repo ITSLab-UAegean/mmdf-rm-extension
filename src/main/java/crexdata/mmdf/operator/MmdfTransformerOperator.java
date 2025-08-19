@@ -93,7 +93,7 @@ public class MmdfTransformerOperator extends MmdfAbstractNodeOperator{
         types.add(new ParameterTypeCategory(
                 "method",
                 "This parameter selects transformation method.",
-                new String[]{"filter","flatMap", "kplerCA", "sink", "deduplicate", "asvCommand","interval"},
+                new String[]{"filter","flatMap", "kplerCA", "sink", "deduplicate", "asvCommand","interval","extract","udf"},
                 0));
         types.add(new ParameterTypeString(
                 "field",

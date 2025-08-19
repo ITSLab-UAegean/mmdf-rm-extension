@@ -49,6 +49,12 @@
             Then it converts it into a kstreams topology and executes the in the process background.
         </synopsis>
     </operator>
+
+    <operator>
+        <key>mmdf_shape_file_loader_operatorr</key>
+        <name>MMDF Loads a shapefile int kstreams </name>
+        <synopsis>This operator expects a shapefile configuration containing a single polygon. It reads its boundaries and splits its area into h3 cells.</synopsis>
+    </operator>
     <!-- This is how group keys are translated: -->
 
     <group>

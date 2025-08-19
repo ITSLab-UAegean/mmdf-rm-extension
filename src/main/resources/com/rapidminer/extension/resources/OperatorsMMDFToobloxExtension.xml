@@ -24,6 +24,10 @@
                 <key>mmdf_fusion_operator</key>
                 <class>crexdata.mmdf.operator.MmdfFusionNodeOperator</class>
             </operator>
+            <operator>
+                <key>mmdf_shape_file_loader_operatorr</key>
+                <class>crexdata.mmdf.operator.ShapeFileLoaderOperator</class>
+            </operator>
         </group>
 
     </group>
