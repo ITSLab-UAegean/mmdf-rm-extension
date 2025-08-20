@@ -36,6 +36,7 @@ import com.rapidminer.operator.ports.InputPort;
 import com.rapidminer.operator.ports.OutputPort;
 import com.rapidminer.operator.text.Document;
 import com.rapidminer.parameter.ParameterType;
+import com.rapidminer.parameter.ParameterTypeCategory;
 import com.rapidminer.parameter.ParameterTypeString;
 import com.rapidminer.tools.ClassLoaderSwapper;
 import com.rapidminer.tools.LogService;
@@ -129,7 +130,7 @@ public class MmdfFusionNodeOperator extends Operator {
         props.put("commit.interval.ms", 10);
         props.put("linger.ms", 5);
         props.put("batch.size", 1024*2);
-        props.put("auto.offset.reset", "latest");
+        props.put("auto.offset.reset", this.getParameterAsString("auto.offset.reset"));
 
 
 
@@ -206,11 +207,13 @@ public class MmdfFusionNodeOperator extends Operator {
     @Override
     public List<ParameterType> getParameterTypes(){
         List<ParameterType> types = super.getParameterTypes();
-        types.add(new ParameterTypeString(
-                "configuration",
-                "This should be a json configuration file",
-                "",
-                false));
+        types.add(new ParameterTypeCategory(
+                "auto.offset.reset",
+                "kafka reading from latest or earliest values",
+                new String[]{"latest","earliest",},
+                0
+                )
+        );
 
         return  types;
     }
