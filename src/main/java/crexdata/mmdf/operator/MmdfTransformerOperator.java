@@ -93,11 +93,11 @@ public class MmdfTransformerOperator extends MmdfAbstractNodeOperator{
         types.add(new ParameterTypeCategory(
                 "method",
                 "This parameter selects transformation method.",
-                new String[]{"filter","flatMap", "kplerCA", "sink", "deduplicate", "asvCommand","interval","extract","udf"},
+                new String[]{"filter","flatMap", "kplerCA", "sink", "deduplicate", "asvCommand","interval","extract","udf","expand_json"},
                 0));
         types.add(new ParameterTypeString(
                 "field",
-                "The field upon the transformation will be applied. ",
+                "The field upon the transformation will be applied. 'filter' requires an operator and a value (empty string if not applicable). 'extract' will extract subtree node. udf will read a math expression from value and store to field. 'expand_json': flattens json formats  ",
                 "",
                 false));
         types.add(new ParameterTypeCategory(
