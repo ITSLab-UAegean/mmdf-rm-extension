@@ -93,17 +93,17 @@ public class MmdfSourceOperator extends MmdfAbstractNodeOperator {
         types.add(new ParameterTypeString(
                 "lon",
                 ParameterDescriptionEnum.LONGITUDE.getLabel(),
-                "lon",
+                "",
                 false));
         types.add(new ParameterTypeString(
                 "lat",
                 ParameterDescriptionEnum.LATITUDE.getLabel(),
-                "lat",
+                "",
                 false));
         types.add(new ParameterTypeString(
                 "id",
                 ParameterDescriptionEnum.ID.getLabel(),
-                "id",
+                "",
                 false));
         types.add(new ParameterTypeString(
                 "t",
