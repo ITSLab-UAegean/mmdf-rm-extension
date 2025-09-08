@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<operators name="mmdf_tooblox_extension" version="6.0" docbundle="com/rapidminer/extension/resources/i18n/OperatorsDocMMDFToobloxExtension">
+<operators name="mmdf_toolbox_extension" version="6.0" docbundle="com/rapidminer/extension/resources/i18n/OperatorsDocMMDFToobloxExtension">
     <group key="">
         <!-- This is an example how to specify Operators and Operator groups. The Operator groups define
                 where Operators will be located in the Operator tree. -->
-
         <group key="crexdata">
-           <operator>
-              <key>mmdf_source_operator</key>
-              <class>crexdata.mmdf_toolbox.MmdfSourceOperator</class>
-           </operator>
+            <operator>I
+                <key>mmdf_source_operator</key>
+                <class>crexdata.mmdf.operator.MmdfSourceOperator</class>
+            </operator>
             <operator>
                 <key>mmdf_transformer_operator</key>
-                <class>crexdata.mmdf_toolbox.MmdfTransformerOperator</class>
+                <class>crexdata.mmdf.operator.MmdfTransformerOperator</class>
             </operator>
             <operator>
                 <key>mmdf_join_operator</key>
-                <class>crexdata.mmdf_toolbox.MmdfJoinOperator</class>
+                <class>crexdata.mmdf.operator.MmdfJoinOperator</class>
             </operator>
             <operator>
                 <key>mmdf_concat_operator</key>
-                <class>crexdata.mmdf_toolbox.MmdfConcatOperator</class>
+                <class>crexdata.mmdf.operator.MmdfConcatOperator</class>
             </operator>
             <operator>
                 <key>mmdf_fusion_operator</key>
-                <class>crexdata.mmdf_toolbox.MmdfFusionNodeOperator</class>
+                <class>crexdata.mmdf.operator.MmdfFusionNodeOperator</class>
             </operator>
-         </group>
+            <operator>
+                <key>mmdf_shape_file_loader_operatorr</key>
+                <class>crexdata.mmdf.operator.ShapeFileLoaderOperator</class>
+            </operator>
+        </group>
 
     </group>
+
 </operators>

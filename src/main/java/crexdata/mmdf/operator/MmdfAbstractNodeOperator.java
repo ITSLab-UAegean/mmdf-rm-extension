@@ -20,13 +20,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-package crexdata.mmdf_toolbox;
+package crexdata.mmdf.operator;
 
 import com.rapidminer.operator.Operator;
 import com.rapidminer.operator.OperatorDescription;
 import com.rapidminer.operator.OperatorException;
 import com.rapidminer.tools.LogService;
-import ioobject.KStreamDataContainer;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -50,6 +49,6 @@ public class MmdfAbstractNodeOperator extends Operator {
 
 
     public void doDefaultWork() throws OperatorException {
-        LogService.getRoot().log(Level.INFO,"MMDF testing");
+        LogService.getRoot().log(Level.INFO,"MMDF Abstract node");
     }
 }

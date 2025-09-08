@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../../../../
+        rapidminerreferencemanual/documentation2html.xsl"?>
+<p1:documents xmlns:p1="http://rapid-i.com/schemas/documentation/reference/1.0"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://rapid-i.com/schemas/documentation/reference/1.0 ">
+
+    <operator key="operator.mmdf_tooblox_extension:mmdf_transformer_operator" name="MMDF Transfomer Operator" locale="en"
+              version="6.5.000">
+
+        <synopsis>This operator extends configuration to transform,filter,format,repeat (spatial) existing kstreams into a new one .
+            Different types of transformations are supported.
+        </synopsis>
+
+        <text>
+            <paragraph>First paragraph.</paragraph>
+            <paragraph>Second paragraph.</paragraph>
+        </text>
+        <inputPorts>
+            <port key="inputPort" name="inputPort" type="com.rapidminer.operator.text.Document">
+                Existing configuration in json format to include transformation configuration.
+            </port>
+        </inputPorts>
+        <outputPorts>
+            <port key="documentPort" name="documentPort" type="com.rapidminer.operator.text.Document">
+                configuration in json format that  includes transformation configuration.
+            </port>
+        </outputPorts>
+
+         description of the parameters and the corresponding values
+        <parameters>
+
+                <parameter key="method" name="log method" type="string">
+                    This parameter selects transformation method.Methods supported are :
+                    "filter","flatMap", "kplerCA", "sink", "deduplicate", "asvCommand","interval","extract","udf","expand_json"
+                </parameter>
+                <parameter key="field" name="field" type="string">
+                    The field upon the transformation will be applied.
+                    'filter' requires an operator and a value (empty string if not applicable).
+                    'extract' will extract subtree node.
+                    'udf' will read a math expression from value and store to field.
+                    'expand_json': flattens json formats
+                </parameter>
+                <parameter key="operator" name="operator" type="string">
+                    Applies when filter is selected, Options available are "hasvalue","eq","neq","gt","gte","lt","lte","notnull"
+                </parameter>
+                <parameter key="value" name="value" type="string">
+                    Value the operator is applied on.",
+                </parameter>
+                <parameter key="output" name="output" type="string">
+                    The output stream name. Used from future nodes (Text).
+                </parameter>
+                <parameter key="topic" name="topic" type="boolean">
+                    Boolean value that converts internal stream into kafka topic using (using the output_name).
+                </parameter>
+                <parameter key="peek" name="peek" type="boolean">
+                    Boolean value that exposes stream values into the log.
+                </parameter>
+
+        </parameters>
+
+        <differentiation>
+            <!-- ... -->
+        </differentiation>
+
+        <tutorialProcesses>
+            <tutorialProcess key="log.test"
+                             title="Logging custom text">
+                <description>
+                    <paragraph>
+                        Tutorial description here.
+                    </paragraph>
+                </description>
+                <process version="6.5.000">
+                    ...
+                </process>
+            </tutorialProcess>
+        </tutorialProcesses>
+    </operator>
+</p1:documents>

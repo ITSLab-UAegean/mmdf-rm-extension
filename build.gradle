@@ -25,7 +25,7 @@ extensionConfig {
      *
      * It is 'com.rapidminer.extension' by default.
      */
-    groupId = 'com.rapidminer.extension'
+    groupId = 'crexdata'
 
     /*
      * The extension vendor which will be displayed in the extensions about box
@@ -57,16 +57,13 @@ extensionConfig {
 // Define third party library dependencies
 dependencies {
     // Kafka client core
-    compileOnly files('libs/rmx_kafka_connector-0.4.0.jar')
     compileOnly files('libs/rmx_text-10.1.0.jar')
-    implementation 'org.apache.kafka:kafka-streams:3.7.1'
-
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.16.2'
-
-    implementation files("libs/mmdf-kstreams-shaded-0.1-SNAPSHOT.jar")
+//    implementation 'com.fasterxml.jackson.core:jackson-core:2.16.2'
+    implementation files("libs/mmdf-kstreams-shaded-0.1.1-SNAPSHOT.jar")
 
 }
 
 afterEvaluate {
-    jar.manifest.attributes("Plugin-Dependencies" : "rmx_text[10.1.0];rmx_kafka_connector[0.4.0]")
+//    jar.manifest.attributes("Plugin-Dependencies" : "rmx_text[10.1.0];rmx_kafka_connector[0.4.0]")
+    jar.manifest.attributes("Plugin-Dependencies" : "rmx_text[10.1.0]")
 }

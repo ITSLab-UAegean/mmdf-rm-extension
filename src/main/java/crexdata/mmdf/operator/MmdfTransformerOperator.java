@@ -20,10 +20,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-package crexdata.mmdf_toolbox;
+package crexdata.mmdf.operator;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -34,10 +33,8 @@ import com.rapidminer.operator.ports.OutputPort;
 import com.rapidminer.operator.text.Document;
 import com.rapidminer.parameter.*;
 import com.rapidminer.tools.LogService;
-import ioobject.ConfigObjectIOObject;
-import org.apache.kafka.common.protocol.types.Field;
+import crexdata.mmdf.operator.utils.ParameterDescriptionEnum;
 
-import javax.print.Doc;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -89,29 +86,18 @@ public class MmdfTransformerOperator extends MmdfAbstractNodeOperator{
 
         LogService.getRoot().log(Level.INFO,"MMDF testing");
     }
-
-    /*
-     {
-      "source":"crexdata-maritime-fused-sog",
-      "method":"kplerCA",
-      "field": "h3",
-      "value": 0.0,
-      "topic":true,
-      "output":"crex-maritime-ca"
-    }
-     */
-
+    
     @Override
     public List<ParameterType> getParameterTypes(){
         List<ParameterType> types = super.getParameterTypes();
         types.add(new ParameterTypeCategory(
                 "method",
                 "This parameter selects transformation method.",
-                new String[]{"filter","flatMap", "kplerCA", "sink", "deduplicate", "asvCommand"},
+                new String[]{"filter","flatMap", "kplerCA", "sink", "deduplicate", "asvCommand","interval","extract","udf","expand_json"},
                 0));
         types.add(new ParameterTypeString(
                 "field",
-                "The field upon the transformation will be applied. ",
+                "The field upon the transformation will be applied. 'filter' requires an operator and a value (empty string if not applicable). 'extract' will extract subtree node. udf will read a math expression from value and store to field. 'expand_json': flattens json formats  ",
                 "",
                 false));
         types.add(new ParameterTypeCategory(
@@ -121,23 +107,23 @@ public class MmdfTransformerOperator extends MmdfAbstractNodeOperator{
                 0));
         types.add(new ParameterTypeString(
                 "value",
-                "This parameter select the value to be compared against",
+                "Value the operator is applied on.",
                 false));
         types.add(new ParameterTypeString(
                 "output",
-                "Output stream name",
+                ParameterDescriptionEnum.OUTPUT_NAME.getLabel(),
                 this.getName(),
                 false));
 
         types.add(new ParameterTypeBoolean(
                 "topic",
-                "Selects whether the stream will materialize into a kafka topic",
+                ParameterDescriptionEnum.TOPIC.getLabel(),
                 false,
                 false));
 
         types.add(new ParameterTypeBoolean(
                 "peek",
-                "Peek results of the steam for debugging",
+                ParameterDescriptionEnum.PEEK.getLabel(),
                 false,
                 false));
 
