@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../../../../
+        rapidminerreferencemanual/documentation2html.xsl"?>
+<p1:documents xmlns:p1="http://rapid-i.com/schemas/documentation/reference/1.0"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://rapid-i.com/schemas/documentation/reference/1.0 ">
+
+    <operator key="operator.mmdf_tooblox_extension:mmdf_source_operator" name="MMDF SOURCE Operator" locale="en"
+              version="6.5.000">
+
+        <synopsis> This operator generates configuration to convert an existing kafka topic into a new k-streams topic,
+            Enables user to define which fields correspond to longitude,latitude,identifier and timestamp.
+            This information will be later be used during fusion execution to efficiently match records of different
+            modalities based on spatial indices, temporal windows and identities provided.
+        </synopsis>
+        <text>
+            <paragraph>First paragraph.</paragraph>
+            <paragraph>Second paragraph.</paragraph>
+        </text>
+<!--        <inputPorts>-->
+<!--            <port key="fusion_conf" name="fusion_conf" type="com.rapidminer.operator.text.Document">-->
+<!--                Input port description.-->
+<!--            </port>-->
+<!--        </inputPorts>-->
+        <outputPorts>
+            <port key="documentPort" name="documentPort" type="com.rapidminer.operator.text.Document">
+               Configuration part in the form of a json file.
+            </port>
+        </outputPorts>
+
+         description of the parameters and the corresponding values
+        <parameters>
+            <parameter key="name" name="log name" type="string">
+                The topic name. Topic must exist in kafka cluster connected (Text).
+            </parameter>
+            <parameter key="lon" name="Longitude" type="string">
+                The name of the field that contains LONGITUDE information (expects Text).
+            </parameter>
+            <parameter key="lat" name="Latitude" type="string">
+                The name of the field that contains LATITUDE information (expects Text).
+            </parameter>
+            <parameter key="id" name="Latitude" type="string">
+                The name of the field that contains IDENTIFIER (expects Text).
+            </parameter>
+            <parameter key="t" name="timestamp" type="string">
+                The name of the field that contains TIME information (expects Text).
+            </parameter>
+            <parameter key="resolution" name="resolution" type="integer">
+                The h3 resolution that contributes the spatial part of the record key. The H3 resolution controls the default spatial resolution for stream (expects integer 1-15).
+            </parameter>
+            <parameter key="expires_ms" name="expires_ms" type="integer">
+                Number of milliseconds that the value is available in the stream (expects Integer).
+            </parameter>
+            <parameter key="peek" name="peek" type="boolean">
+                Boolean value that exposes stream values into the log.
+            </parameter>
+        </parameters>
+
+<!--        <differentiation>-->
+<!--            &lt;!&ndash; ... &ndash;&gt;-->
+<!--        </differentiation>-->
+
+<!--        <tutorialProcesses>-->
+<!--            <tutorialProcess key="log.test"-->
+<!--                             title="Logging custom text">-->
+<!--                <description>-->
+<!--                    <paragraph>-->
+<!--                        Tutorial description here.-->
+<!--                    </paragraph>-->
+<!--                </description>-->
+<!--                <process version="6.5.000">-->
+<!--                    ...-->
+<!--                </process>-->
+<!--            </tutorialProcess>-->
+<!--        </tutorialProcesses>-->
+    </operator>
+</p1:documents>

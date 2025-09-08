@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../../../../
+        rapidminerreferencemanual/documentation2html.xsl"?>
+<p1:documents xmlns:p1="http://rapid-i.com/schemas/documentation/reference/1.0"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://rapid-i.com/schemas/documentation/reference/1.0 ">
+
+    <operator key="operator.mmdf_tooblox_extension:mmdf_join_operator" name="MMDF JOIN Operator" locale="en"
+              version="6.5.000">
+
+        <synopsis> This operator appends configuration for a join operation.
+            The right and the left kstream configurations can be either a source kstream or a transformed one.
+            Different types of join are supported.
+        </synopsis>
+
+        <text>
+            <paragraph>First paragraph.</paragraph>
+            <paragraph>Second paragraph.</paragraph>
+        </text>
+        <inputPorts>
+            <port key="fusion_conf" name="fusion_conf" type="com.rapidminer.operator.text.Document">
+                Input port description.
+            </port>
+        </inputPorts>
+        <outputPorts>
+            <port key="app_id" name="app_id" type="com.rapidminer.operator.text.Document">
+                Output port description.
+            </port>
+        </outputPorts>
+
+         description of the parameters and the corresponding values
+        <parameters>
+
+            <parameter key="type" name="join type" type="string">
+                Type of the join :
+                "merge","join","joinLatest", "joinAsTable","leftJoin","leftJoinAsTable","pass"
+            </parameter>
+            <parameter key="output" name="output" type="string">
+                The output stream name. Used from future nodes (Text).
+            </parameter>
+            <parameter key="fields" name="fields" type="string">
+                "A comma separated value of fields that will be copied to the result, if  empty all fields are copied",
+            </parameter>
+            <parameter key="spatial_index" name="spatial_index" type="integer">
+                The h3 resolution that contributes the spatial part of the record key. The H3 resolution controls the default spatial resolution for stream (expects integer 1-15).
+            </parameter>
+            <parameter key="dt_ms" name="dt_ms" type="integer">
+                Maximum time interval in milliseconds that two values are considered relevant for processing.
+            </parameter>
+
+            <parameter key="topic" name="topic" type="boolean">
+                Boolean value that converts internal stream into kafka topic using (using the output_name).
+            </parameter>
+            <parameter key="peek" name="peek" type="boolean">
+                Boolean value that exposes stream values into the log.
+            </parameter>
+
+        </parameters>
+
+        <differentiation>
+            <!-- ... -->
+        </differentiation>
+
+        <tutorialProcesses>
+            <tutorialProcess key="log.test"
+                             title="Logging custom text">
+                <description>
+                    <paragraph>
+                        Tutorial description here.
+                    </paragraph>
+                </description>
+                <process version="6.5.000">
+                    ...
+                </process>
+            </tutorialProcess>
+        </tutorialProcesses>
+    </operator>
+</p1:documents>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../../../../
+        rapidminerreferencemanual/documentation2html.xsl"?>
+<p1:documents xmlns:p1="http://rapid-i.com/schemas/documentation/reference/1.0"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://rapid-i.com/schemas/documentation/reference/1.0 ">
+
+    <operator key="operator.mmdf_tooblox_extension:mmdf_shape_file_loader_operatorr" name="MMDF Shapefile Injector" locale="en"
+              version="6.5.000">
+
+        <synopsis>This operator expects a shapefile configuration containing a single polygon. It reads its boundaries and splits its area into h3 cells.</synopsis>
+
+
+        <text>
+            <paragraph>First paragraph.</paragraph>
+            <paragraph>Second paragraph.</paragraph>
+        </text>
+        <inputPorts>
+            <port key="connectionSelector" name="connectionSelector" type="com.rapidminer.connection.util.ConnectionInformationSelector">
+                ConnectionInformationSelector that connects to a live kafka cluster.
+            </port>
+        </inputPorts>
+        <outputPorts>
+            <port key="app_id" name="app_id" type="com.rapidminer.operator.text.Document">
+                Output port description.
+            </port>
+        </outputPorts>
+
+         description of the parameters and the corresponding values
+        <parameters>
+            <parameter key="shapefile_url" name="shapefile_url" type="string">
+                The location of the shapefile
+            </parameter>
+        </parameters>
+
+        <differentiation>
+            <!-- ... -->
+        </differentiation>
+
+<!--        <tutorialProcesses>-->
+<!--            <tutorialProcess key="log.test"-->
+<!--                             title="Logging custom text">-->
+<!--                <description>-->
+<!--                    <paragraph>-->
+<!--                        Tutorial description here.-->
+<!--                    </paragraph>-->
+<!--                </description>-->
+<!--                <process version="6.5.000">-->
+<!--                    ...-->
+<!--                </process>-->
+<!--            </tutorialProcess>-->
+<!--        </tutorialProcesses>-->
+    </operator>
+</p1:documents>
