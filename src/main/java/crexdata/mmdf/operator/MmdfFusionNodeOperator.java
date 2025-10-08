@@ -121,12 +121,25 @@ public class MmdfFusionNodeOperator extends Operator {
             props.put("sasl.jaas.config", shadow.org.apache.kafka.common.security.plain.PlainLoginModule.class.getName() +" required " +
                     "username=\"" +  connConfig.get("cluster_config.username") + "\" password=\"" + connConfig.get("cluster_config.password")+ "\";"); // JAAS login configuration
         }
-        props.put("ssl.truststore.location", connConfig.get("cluster_config.ssl_trust_store_location")); // Path to your truststore
-        props.put("ssl.truststore.password", connConfig.get("cluster_config.ssl_trust_store_password"));      // Truststore password
-        props.put("ssl.keystore.location", connConfig.get("cluster_config.ssl_key_store_location"));     // Path to your keystore
-        props.put("ssl.keystore.password", connConfig.get("cluster_config.ssl_key_store_password"));          // Keystore password
 
-        props.put("ssl.key.password",connConfig.get("cluster_config.ssl_trust_store_password"));
+        if (connConfig.containsKey("cluster_config.ssl_trust_store_location")){
+            props.put("ssl.truststore.location", connConfig.get("cluster_config.ssl_trust_store_location")); // Path to your truststore
+
+        }
+
+        if (connConfig.containsKey("cluster_config.ssl_trust_store_password")){
+            props.put("ssl.truststore.password", connConfig.get("cluster_config.ssl_trust_store_password"));      // Truststore password
+            props.put("ssl.key.password",connConfig.get("cluster_config.ssl_trust_store_password"));
+        }
+        if (connConfig.containsKey("cluster_config.ssl_key_store_location")){
+            props.put("ssl.keystore.location", connConfig.get("cluster_config.ssl_key_store_location"));     // Path to your keystore
+        }
+        if (connConfig.containsKey("cluster_config.ssl_key_store_password")){
+            props.put("ssl.keystore.password", connConfig.get("cluster_config.ssl_key_store_password"));          // Keystore password
+        }
+
+
+
         props.put("commit.interval.ms", 10);
         props.put("linger.ms", 5);
         props.put("batch.size", 1024*2);
