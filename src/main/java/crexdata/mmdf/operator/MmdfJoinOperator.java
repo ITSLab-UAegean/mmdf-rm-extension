@@ -175,16 +175,16 @@ public class MmdfJoinOperator extends MmdfAbstractNodeOperator {
                 "dt_ms",
                 ParameterDescriptionEnum.DT_MS.getLabel(),
                 0,
-                10000));
+                360000));
         types.add(new ParameterTypeInt(
                 "distance",
                 ParameterDescriptionEnum.DISTANCE_METERS.getLabel(),
                 1,
-                1000));
+                100000));
         types.add(new ParameterTypeInt(
                 "spatial_resolution",
                 ParameterDescriptionEnum.H3_RESOLUTION.getLabel(),
-                8,
+                2,
                 13));
         types.add(new ParameterTypeCategory(
                 "id_join_mechanism",
