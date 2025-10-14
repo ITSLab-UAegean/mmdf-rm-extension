@@ -186,6 +186,11 @@ public class MmdfJoinOperator extends MmdfAbstractNodeOperator {
                 ParameterDescriptionEnum.H3_RESOLUTION.getLabel(),
                 8,
                 13));
+        types.add(new ParameterTypeCategory(
+                "id_join_mechanism",
+                "Join mechanism with respect to the identifier. ",
+                new String[]{"ignore","disjoin","match"},
+                0));
         types.add(new ParameterTypeBoolean(
                 "topic",
                 ParameterDescriptionEnum.TOPIC.getLabel(),

@@ -30,7 +30,7 @@
          description of the parameters and the corresponding values
         <parameters>
 
-                <parameter key="method" name="log method" type="string">
+                <parameter key="method" name="method" type="string">
                     This parameter selects transformation method.Methods supported are :
                     "filter","flatMap", "kplerCA", "sink", "deduplicate", "asvCommand","interval","extract","udf","expand_json"
                 </parameter>
