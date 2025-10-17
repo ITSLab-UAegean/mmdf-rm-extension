@@ -155,13 +155,9 @@ public class MmdfJoinOperator extends MmdfAbstractNodeOperator {
         types.add(new ParameterTypeCategory(
                 "type",
                 "Type of the join",
-                new String[]{"merge","join","joinLatest", "joinAsTable","leftJoin","leftJoinAsTable","pass"},
+                new String[]{"merge","simpleJoin","simpleLeftJoin","join","joinLatest", "joinAsTable","leftJoin","leftJoinAsTable","pass"},
                 0));
-        types.add(new ParameterTypeString(
-                "output",
-                ParameterDescriptionEnum.OUTPUT_NAME.getLabel(),
-               "Name of the  k-stream output topic",
-                false));
+
         types.add(new ParameterTypeString(
                 "fields",
                 "A comma separated value of fields that will be copied to the result, if  empty all fields are copied",
@@ -175,12 +171,12 @@ public class MmdfJoinOperator extends MmdfAbstractNodeOperator {
                 "dt_ms",
                 ParameterDescriptionEnum.DT_MS.getLabel(),
                 0,
-                360000));
+                72000000));
         types.add(new ParameterTypeInt(
                 "distance",
                 ParameterDescriptionEnum.DISTANCE_METERS.getLabel(),
                 1,
-                100000));
+                1000000));
         types.add(new ParameterTypeInt(
                 "spatial_resolution",
                 ParameterDescriptionEnum.H3_RESOLUTION.getLabel(),
@@ -191,6 +187,16 @@ public class MmdfJoinOperator extends MmdfAbstractNodeOperator {
                 "Join mechanism with respect to the identifier. ",
                 new String[]{"ignore","disjoin","match"},
                 0));
+        types.add(new ParameterTypeString(
+                "records_name",
+                ParameterDescriptionEnum.RECORDS_NAME.getLabel(),
+                "detections",
+                false));
+        types.add(new ParameterTypeString(
+                "output",
+                ParameterDescriptionEnum.OUTPUT_NAME.getLabel(),
+                "Name of the  k-stream output topic",
+                false));
         types.add(new ParameterTypeBoolean(
                 "topic",
                 ParameterDescriptionEnum.TOPIC.getLabel(),

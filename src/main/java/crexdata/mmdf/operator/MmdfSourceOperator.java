@@ -119,7 +119,7 @@ public class MmdfSourceOperator extends MmdfAbstractNodeOperator {
                 "expires_ms",
                 ParameterDescriptionEnum.EXPIRE_MS.getLabel(),
                 0,
-                720000));
+                72000000));
         types.add(new ParameterTypeBoolean(
                 "peek",
                 ParameterDescriptionEnum.PEEK.getLabel(),

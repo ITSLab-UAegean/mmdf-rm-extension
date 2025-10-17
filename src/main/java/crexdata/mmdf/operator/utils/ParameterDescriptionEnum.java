@@ -3,6 +3,7 @@ package crexdata.mmdf.operator.utils;
 public enum ParameterDescriptionEnum {
     INPUT_TOPIC_NAME("The topic name. Topic must exist in kafka cluster connected (Text)."),
     OUTPUT_NAME("The output stream name. Used from future nodes (Text)."),
+    RECORDS_NAME("The array property name for the fused records"),
     LONGITUDE("The name of the field that contains LONGITUDE information (expects Text)."),
     LATITUDE("The name of the field that contains LATITUDE information (expects Text)."),
     TIME("The name of the field that contains TIME information (expects Text)."),
