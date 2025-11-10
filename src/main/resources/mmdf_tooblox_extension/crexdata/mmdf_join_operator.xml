@@ -54,6 +54,10 @@
             <parameter key="peek" name="peek" type="boolean">
                 Boolean value that exposes stream values into the log.
             </parameter>
+            <parameter key="id_join_mechanism" name="id_join_mechanism" type="String">
+                Behavior  of the join with respect to identifier :
+                "ignore","disjoin","match"
+            </parameter>
 
         </parameters>
 

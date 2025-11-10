@@ -30,8 +30,8 @@
 
          description of the parameters and the corresponding values
         <parameters>
-            <parameter key="name" name="log name" type="string">
-                The topic name. Topic must exist in kafka cluster connected (Text).
+            <parameter key="name" name="name" type="string">
+                "The topic name. Topic must exist in kafka cluster connected (Text).
             </parameter>
             <parameter key="lon" name="Longitude" type="string">
                 The name of the field that contains LONGITUDE information (expects Text).
@@ -39,7 +39,7 @@
             <parameter key="lat" name="Latitude" type="string">
                 The name of the field that contains LATITUDE information (expects Text).
             </parameter>
-            <parameter key="id" name="Latitude" type="string">
+            <parameter key="id" name="Id" type="string">
                 The name of the field that contains IDENTIFIER (expects Text).
             </parameter>
             <parameter key="t" name="timestamp" type="string">
