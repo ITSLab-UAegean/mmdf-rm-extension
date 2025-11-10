@@ -23,19 +23,19 @@
 package crexdata.mmdf.operator;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rapidminer.connection.util.ConnectionInformationSelector;
 import com.rapidminer.connection.valueprovider.handler.ValueProviderHandlerRegistry;
 import com.rapidminer.gui.tools.ProgressThread;
 import com.rapidminer.gui.tools.ProgressThreadStoppedException;
-import com.rapidminer.operator.Operator;
-import com.rapidminer.operator.OperatorDescription;
-import com.rapidminer.operator.OperatorException;
+import com.rapidminer.operator.*;
 import com.rapidminer.operator.ports.InputPort;
 import com.rapidminer.operator.ports.OutputPort;
 import com.rapidminer.operator.text.Document;
 import com.rapidminer.parameter.ParameterType;
+import com.rapidminer.parameter.ParameterTypeBoolean;
 import com.rapidminer.parameter.ParameterTypeCategory;
 import com.rapidminer.parameter.ParameterTypeString;
 import com.rapidminer.tools.ClassLoaderSwapper;
@@ -88,19 +88,19 @@ public class MmdfFusionNodeOperator extends Operator {
         LogService.getRoot().log(Level.INFO, doc.toString());
 
         try {
-            Class.forName(shadow.org.apache.kafka.common.security.plain.PlainLoginModule.class.getName() );
+            Class.forName(shadow.org.apache.kafka.common.security.plain.PlainLoginModule.class.getName());
             Class.forName(shadow.org.apache.kafka.common.serialization.Serdes.class.getName());
             Class.forName(shadow.org.apache.kafka.clients.admin.AdminClient.class.getName());
 
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        String app_id= "fusion-pipe-" + UUID.randomUUID();
+        String app_id = "fusion-pipe-" + UUID.randomUUID();
         Document appDoc = new Document(app_id);
 //        appDoc.setUserData("app_id",app_id);
         this.app_id.deliver(appDoc);
         Properties props = new Properties();
-        props.put("application.id",app_id );
+        props.put("application.id", app_id);
         props.put("bootstrap.servers", connConfig.get("cluster_config.host_ports"));
         props.put("security.protocol", "SASL_SSL");//connConfig.getValue("cluster_config.auth_method"));
 //        props.put("default.key.serde", Serdes.StringSerde.class);
@@ -109,9 +109,9 @@ public class MmdfFusionNodeOperator extends Operator {
 
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
-        props.put("state.dir", "/Users/"+System.getProperty("user.name")+"/.AltairRapidMiner/AI Studio/shared\n");
+        props.put("state.dir", "/Users/" + System.getProperty("user.name") + "/.AltairRapidMiner/AI Studio/shared\n");
         // SASL/SSL security configurations
-            // SASL mechanism (use PLAIN or other if configured differently)
+        // SASL mechanism (use PLAIN or other if configured differently)
 
         if (!connConfig.get("cluster_config.auth_method").equals("none")) {
             props.put("sasl.mechanism", "PLAIN");
@@ -149,18 +149,16 @@ public class MmdfFusionNodeOperator extends Operator {
             if (connConfig.containsKey("cluster_config.ssl_key_store_password")) {
                 props.put("ssl.keystore.password", connConfig.get("cluster_config.ssl_key_store_password"));          // Keystore password
             }
-        }else{
+        } else {
 
-            props.put("security.protocol","PLAINTEXT");
+            props.put("security.protocol", "PLAINTEXT");
         }
-
 
 
         props.put("commit.interval.ms", 10);
         props.put("linger.ms", 5);
-        props.put("batch.size", 1024*2);
+        props.put("batch.size", 1024 * 2);
         props.put("auto.offset.reset", this.getParameterAsString("auto.offset.reset"));
-
 
 
         LogService.getRoot().log(Level.INFO, "MMDF Kafka -- Connection info accepted OK ");
@@ -169,65 +167,36 @@ public class MmdfFusionNodeOperator extends Operator {
 //        topics.add("test_new");
 
         LogService.getRoot().log(Level.INFO, "MMDF Kafka -- JAVA CLASS PATH RUNTIME  OK");
-        LogService.getRoot().log(Level.ALL,System.getProperty("java.class.path"));
+        LogService.getRoot().log(Level.ALL, System.getProperty("java.class.path"));
 
+        if (this.getParameterAsBoolean("run.in.thread")) {
 
-            ProgressThread thread = new ProgressThread("mmdf-kstreams:"+app_id) {
-
-
+            ProgressThread thread = new ProgressThread("mmdf-kstreams:" + app_id) {
                 @Override
                 public void run() {
-                    try (ClassLoaderSwapper cls2 = ClassLoaderSwapper.withContextClassLoader(FusionApp.class.getClassLoader())) {
-
-                        ObjectMapper mapper = new ObjectMapper();
-                    try {
+                    try{
                         String mmdf_config = doc.getTokenText();
-                        ObjectNode base = (ObjectNode) mapper.readTree(mmdf_config);
-
-
-                        if (base.has("payload")) {
-                            ObjectNode payload = (ObjectNode) base.get("payload");
-
-                            if (!payload.has("transformations")){
-                                payload.putArray("transformations");
-                            }
-                            if (!payload.has("relations")){
-                                payload.putArray("relations");
-                            }
-
-                            String config = mapper.writeValueAsString(payload);
-
-                            LogService.getRoot().log(Level.INFO, config);
-                            FusionApp.execute(props, config, LogService.getRoot(),this::checkCancelled);
-                        } else {
-
-                            if (!base.has("transformations")){
-                                base.putArray("transformations");
-                            }
-                            if (!base.has("relations")){
-                                base.putArray("relations");
-                            }
-                            FusionApp.execute(props, mmdf_config, LogService.getRoot(),this::checkCancelled);
-                        }
-
-
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
-                    } catch (ProgressThreadStoppedException e) {
-                        LogService.getRoot().log(Level.INFO, "MMDF Kafka -- EXECUTION STOPPED");
-                    }
-
+                        run_execution(props,mmdf_config, this::checkCancelled);
                     }catch (Exception e) {
-                        throw new RuntimeException("Failed to execute MMDF"+ e.getMessage());
-                    }
+                        throw new RuntimeException("Failed to execute MMDF" + e.getMessage());
+                   }
                 }
 
 
-        };
+            };
             thread.start();
 
 
-
+        } else {
+            String mmdf_config = doc.getTokenText();
+            run_execution(props,mmdf_config, () -> {
+                try {
+                    checkForStop();
+                } catch (ProcessStoppedException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
     }
 
     /****
@@ -243,9 +212,50 @@ public class MmdfFusionNodeOperator extends Operator {
                 0
                 )
         );
+        types.add(new ParameterTypeBoolean(
+                        "run.in.thread",
+                        "sends execution to background thread (AI Studio)",
+                        true,
+                        true
+                )
+        );
 
         return  types;
     }
 
+    public void run_execution(Properties props,String mmdf_config,Runnable stop_check) throws WrapperOperatorRuntimeException {
+        try (ClassLoaderSwapper cls2 = ClassLoaderSwapper.withContextClassLoader(FusionApp.class.getClassLoader())) {
+
+            ObjectMapper mapper = new ObjectMapper();
+            ObjectNode base = (ObjectNode) mapper.readTree(mmdf_config);
+
+            if (base.has("payload")) {
+                ObjectNode payload = (ObjectNode) base.get("payload");
+
+                if (!payload.has("transformations")) {
+                    payload.putArray("transformations");
+                }
+                if (!payload.has("relations")) {
+                    payload.putArray("relations");
+                }
+
+                String config = mapper.writeValueAsString(payload);
+
+                LogService.getRoot().log(Level.INFO, config);
+                FusionApp.execute(props, config, LogService.getRoot(), stop_check);
+            } else {
+
+                if (!base.has("transformations")) {
+                    base.putArray("transformations");
+                }
+                if (!base.has("relations")) {
+                    base.putArray("relations");
+                }
+                FusionApp.execute(props, mmdf_config, LogService.getRoot(),stop_check);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to execute MMDF" + e.getMessage());
+        }
+    }
 
 }
