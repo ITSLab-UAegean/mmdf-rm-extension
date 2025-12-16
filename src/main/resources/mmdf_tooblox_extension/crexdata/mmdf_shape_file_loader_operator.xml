@@ -5,7 +5,7 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://rapid-i.com/schemas/documentation/reference/1.0 ">
 
-    <operator key="operator.mmdf_tooblox_extension:mmdf_shape_file_loader_operatorr" name="MMDF Shapefile Injector" locale="en"
+    <operator key="operator.mmdf_tooblox_extension:mmdf_shape_file_loader_operator" name="MMDF SHAPEFILE Injector" locale="en"
               version="6.5.000">
 
         <synopsis>This operator expects a shapefile configuration containing a single polygon. It reads its boundaries and splits its area into h3 cells.</synopsis>
