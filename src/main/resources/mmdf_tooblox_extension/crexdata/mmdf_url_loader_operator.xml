@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../../../../
+        rapidminerreferencemanual/documentation2html.xsl"?>
+<p1:documents xmlns:p1="http://rapid-i.com/schemas/documentation/reference/1.0"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://rapid-i.com/schemas/documentation/reference/1.0 ">
+
+    <operator key="operator.mmdf_tooblox_extension:mmdf_url_loader_operator" name="MMDF URL Injector" locale="en"
+              version="6.5.000">
+
+        <synopsis>This operator expects  a public url/ link in a string format and an area defined in Well known text (WKT). In addition, it requires a topic name and an h3 resolution.
+            Then for each cell in the area defined by the WKT it injects a record with the specified url.</synopsis>
+
+
+        <text>
+            <paragraph>First paragraph.</paragraph>
+            <paragraph>Second paragraph.</paragraph>
+        </text>
+        <inputPorts>
+            <port key="connectionSelector" name="connectionSelector" type="com.rapidminer.connection.util.ConnectionInformationSelector">
+                ConnectionInformationSelector that connects to a live kafka cluster.
+            </port>
+        </inputPorts>
+        <outputPorts>
+            <port key="app_id" name="app_id" type="com.rapidminer.operator.text.Document">
+                Output port description.
+            </port>
+        </outputPorts>
+
+         description of the parameters and the corresponding values
+        <parameters>
+            <parameter key="url" name="url" type="string">
+                The url to be shared
+            </parameter>
+            <parameter key="wkt" name="wkt" type="string">
+                The footprint/related area of the url in well known text format
+            </parameter>
+            <parameter key="topic" name="topic" type="string">
+                The name of the topic
+            </parameter>
+            <parameter key="resolution" name="resolution" type="integer">
+                H3 resolution
+            </parameter>
+        </parameters>
+
+        <differentiation>
+            <!-- ... -->
+        </differentiation>
+
+<!--        <tutorialProcesses>-->
+<!--            <tutorialProcess key="log.test"-->
+<!--                             title="Logging custom text">-->
+<!--                <description>-->
+<!--                    <paragraph>-->
+<!--                        Tutorial description here.-->
+<!--                    </paragraph>-->
+<!--                </description>-->
+<!--                <process version="6.5.000">-->
+<!--                    ...-->
+<!--                </process>-->
+<!--            </tutorialProcess>-->
+<!--        </tutorialProcesses>-->
+    </operator>
+</p1:documents>
