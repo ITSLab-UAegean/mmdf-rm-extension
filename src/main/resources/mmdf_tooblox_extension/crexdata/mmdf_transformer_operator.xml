@@ -5,7 +5,7 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://rapid-i.com/schemas/documentation/reference/1.0 ">
 
-    <operator key="operator.mmdf_tooblox_extension:mmdf_transformer_operator" name="MMDF Transfomer Operator" locale="en"
+    <operator key="operator.mmdf_tooblox_extension:mmdf_transformer_operator" name="MMDF TRANSFORMER Operator" locale="en"
               version="6.5.000">
 
         <synopsis>This operator extends configuration to transform,filter,format,repeat (spatial) existing kstreams into a new one .

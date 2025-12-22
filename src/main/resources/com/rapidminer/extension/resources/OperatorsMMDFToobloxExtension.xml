@@ -4,7 +4,7 @@
         <!-- This is an example how to specify Operators and Operator groups. The Operator groups define
                 where Operators will be located in the Operator tree. -->
         <group key="crexdata">
-            <operator>I
+            <operator>
                 <key>mmdf_source_operator</key>
                 <class>crexdata.mmdf.operator.MmdfSourceOperator</class>
             </operator>
@@ -25,8 +25,12 @@
                 <class>crexdata.mmdf.operator.MmdfFusionNodeOperator</class>
             </operator>
             <operator>
-                <key>mmdf_shape_file_loader_operatorr</key>
+                <key>mmdf_shape_file_loader_operator</key>
                 <class>crexdata.mmdf.operator.ShapeFileLoaderOperator</class>
+            </operator>
+            <operator>
+                <key>mmdf_url_loader_operator</key>
+                <class>crexdata.mmdf.operator.UrlLoaderOperator</class>
             </operator>
         </group>
 

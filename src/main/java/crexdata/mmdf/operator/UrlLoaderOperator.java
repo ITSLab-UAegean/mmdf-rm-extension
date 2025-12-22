@@ -1,4 +1,4 @@
-/**
+package crexdata.mmdf.operator; /**
  * Crexdata Project
  *
  * Copyright (C) 2025-2025 by Crexdata Project and the contributors
@@ -20,7 +20,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-package crexdata.mmdf.operator;
 
 import com.rapidminer.connection.util.ConnectionInformationSelector;
 import com.rapidminer.connection.valueprovider.handler.ValueProviderHandlerRegistry;
@@ -30,23 +29,21 @@ import com.rapidminer.operator.OperatorDescription;
 import com.rapidminer.operator.OperatorException;
 import com.rapidminer.operator.ports.OutputPort;
 import com.rapidminer.operator.text.Document;
-import com.rapidminer.parameter.*;
+import com.rapidminer.parameter.ParameterType;
+import com.rapidminer.parameter.ParameterTypeDirectory;
+import com.rapidminer.parameter.ParameterTypeInt;
+import com.rapidminer.parameter.ParameterTypeString;
 import com.rapidminer.tools.ClassLoaderSwapper;
 import com.rapidminer.tools.LogService;
 import crexdata.mmdf.operator.config.KafkaPropertiesProvider;
+import crexdata.mmdf.operator.utils.ParameterDescriptionEnum;
 import org.aegean.FusionApp;
-import org.aegean.ShapefilePublisherApp;
+import org.aegean.VideoStreamPublisherApp;
 import shadow.org.apache.kafka.common.serialization.Serdes;
 import shadow.org.apache.kafka.streams.StreamsConfig;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Map;
-import java.util.Properties;
-import java.util.List;
-import java.util.Objects;
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 /**
@@ -54,13 +51,13 @@ import java.util.logging.Level;
  *
  * @author gspiliopoulos@aegean.gr
  */
-public class ShapeFileLoaderOperator extends Operator {
+public class UrlLoaderOperator extends Operator {
     private final OutputPort app_id =getOutputPorts().createPort("appId");
     private final ConnectionInformationSelector connectionSelector = new ConnectionInformationSelector(this, "kafka_connector:kafka");
 
 
 
-    public ShapeFileLoaderOperator(OperatorDescription description) {
+    public UrlLoaderOperator(OperatorDescription description) {
         super(description);
     }
 
@@ -77,7 +74,6 @@ public class ShapeFileLoaderOperator extends Operator {
     /***
      * Does default work
      * @throws OperatorException if the operation fails
-     * @throws IOException is file not found
      ***/
     public void doDefaultWork() throws OperatorException, IOException {
 
@@ -107,15 +103,18 @@ public class ShapeFileLoaderOperator extends Operator {
         }else{
             props.put("state.dir", this.getParameterAsFile("state.dir").getPath());
         }
+
         LogService.getRoot().log(Level.INFO, "MMDF Kafka -- Connection info accepted ");
         LogService.getRoot().log(Level.INFO, props.toString());
-        LogService.getRoot().log(Level.INFO, "MMDF Kafka -- JAVA CLASS PATH RUNTIME ");
-        LogService.getRoot().log(Level.INFO, System.getProperty("java.class.path"));
-
         List<String> topics = new ArrayList<>();
         topics.add("test_new");
 
-        File file = this.getParameterAsFile("shapefile_url");
+        LogService.getRoot().log(Level.INFO, "MMDF Kafka -- JAVA CLASS PATH RUNTIME ");
+        LogService.getRoot().log(Level.INFO,System.getProperty("java.class.path"));
+
+
+        String url  = this.getParameterAsString("url");
+        String wkt  = this.getParameterAsString("wkt");
         String topic  = this.getParameterAsString("topic");
         Integer resolution  = this.getParameterAsInt("resolution");
         ProgressThread thread = new ProgressThread("Shapefile-Loader-app:"+app_id) {
@@ -124,19 +123,13 @@ public class ShapeFileLoaderOperator extends Operator {
                 @Override
                 public void run() {
                     try (ClassLoaderSwapper cls2 = ClassLoaderSwapper.withContextClassLoader(FusionApp.class.getClassLoader())) {
-                        ShapefilePublisherApp.execute(props, file.getPath(), topic, resolution, LogService.getRoot(), this::checkCancelled);
+                        VideoStreamPublisherApp.execute(props, topic, url, wkt, resolution, LogService.getRoot(),this::checkCancelled);
                     } catch (Exception e) {
                         LogService.getRoot().log(Level.INFO, "MMDF Kafka -- EXECUTION STOPPED");
                     }
-
-
                 }
-
-
         };
         thread.start();
-
-
 
     }
 
@@ -146,11 +139,15 @@ public class ShapeFileLoaderOperator extends Operator {
     @Override
     public List<ParameterType> getParameterTypes(){
         List<ParameterType> types = super.getParameterTypes();
-        types.add(new ParameterTypeFile("shapefile_url", "The location of the shapefile", ".shp", false));
-        types.add(new ParameterTypeString("topic", "The name of the topic", "crex-boundaries", false));
-        types.add(new ParameterTypeInt("resolution", "H3 resolution", 6, 14));
+        types.add(new ParameterTypeString("url","The url to be shared","",false));
+        types.add(new ParameterTypeString("wkt","The footprint/related area of the url in well known text format","",false));
+        types.add(new ParameterTypeString("topic","The name of the topic","crex-video",false));
+        types.add(new ParameterTypeInt(
+                "resolution",
+                ParameterDescriptionEnum.H3_RESOLUTION.getLabel(),
+                2,
+                13));
         types.add(new ParameterTypeDirectory("state.dir","State Directory Location","/tmp/"));
-
 
         return  types;
     }
