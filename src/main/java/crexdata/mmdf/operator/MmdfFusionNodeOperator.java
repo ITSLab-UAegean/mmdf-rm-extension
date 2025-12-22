@@ -175,6 +175,7 @@ public class MmdfFusionNodeOperator extends Operator {
         }
         props.put("auto.offset.reset", this.getParameterAsString("auto.offset.reset"));
 
+            if (Objects.equals(props.get("sasl.mechanism").toString(), "SCRAM-SHA-256")) {
 
         LogService.getRoot().log(Level.INFO, "MMDF Kafka -- Connection info accepted OK ");
         LogService.getRoot().log(Level.ALL, props.toString());
