@@ -51,9 +51,14 @@
     </operator>
 
     <operator>
-        <key>mmdf_shape_file_loader_operatorr</key>
-        <name>MMDF Loads a shapefile int kstreams </name>
+        <key>mmdf_shape_file_loader_operator</key>
+        <name>MMDF SHAPEFILE Injector</name>
         <synopsis>This operator expects a shapefile configuration containing a single polygon. It reads its boundaries and splits its area into h3 cells.</synopsis>
+    </operator>
+    <operator>
+        <key>mmdf_url_loader_operatorr</key>
+        <name>MMDF URL Injector</name>
+        <synopsis>This operator uses a url and a polygon area defined in well known text and an h3 target resolution. It ingests for all cells in the area a record of the url.</synopsis>
     </operator>
     <!-- This is how group keys are translated: -->
 

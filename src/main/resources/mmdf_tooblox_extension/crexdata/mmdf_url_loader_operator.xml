@@ -5,10 +5,11 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://rapid-i.com/schemas/documentation/reference/1.0 ">
 
-    <operator key="operator.mmdf_tooblox_extension:mmdf_shape_file_loader_operator" name="MMDF SHAPEFILE Injector" locale="en"
+    <operator key="operator.mmdf_tooblox_extension:mmdf_url_loader_operator" name="MMDF URL Injector" locale="en"
               version="6.5.000">
 
-        <synopsis>This operator expects a shapefile configuration containing a single polygon. It reads its boundaries and splits its area into h3 cells.</synopsis>
+        <synopsis>This operator expects  a public url/ link in a string format and an area defined in Well known text (WKT). In addition, it requires a topic name and an h3 resolution.
+            Then for each cell in the area defined by the WKT it injects a record with the specified url.</synopsis>
 
 
         <text>
@@ -28,8 +29,17 @@
 
          description of the parameters and the corresponding values
         <parameters>
-            <parameter key="shapefile_url" name="shapefile_url" type="string">
-                The location of the shapefile
+            <parameter key="url" name="url" type="string">
+                The url to be shared
+            </parameter>
+            <parameter key="wkt" name="wkt" type="string">
+                The footprint/related area of the url in well known text format
+            </parameter>
+            <parameter key="topic" name="topic" type="string">
+                The name of the topic
+            </parameter>
+            <parameter key="resolution" name="resolution" type="integer">
+                H3 resolution
             </parameter>
         </parameters>
 

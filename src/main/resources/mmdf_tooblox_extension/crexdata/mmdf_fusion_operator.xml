@@ -35,6 +35,9 @@
             <parameter key="auto.offset.reset" name="auto.offset.reset" type="string">
                 Kafka reading from latest or earliest values. Options available "latest","earliest".
             </parameter>
+            <parameter key="state.dir" name="state.dir" type="string">
+                Kafka streams internal state directory location
+            </parameter>
         </parameters>
 
         <differentiation>
