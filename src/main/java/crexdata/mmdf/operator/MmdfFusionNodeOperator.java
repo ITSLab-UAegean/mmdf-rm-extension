@@ -108,43 +108,42 @@ public class MmdfFusionNodeOperator extends Operator {
         }
         props.put("auto.offset.reset", this.getParameterAsString("auto.offset.reset"));
 
-        if (Objects.equals(props.get("sasl.mechanism").toString(), "SCRAM-SHA-256")) {
-
-            LogService.getRoot().log(Level.INFO, "MMDF Kafka -- Connection info accepted OK ");
-            LogService.getRoot().log(Level.ALL, props.toString());
 
 
-            LogService.getRoot().log(Level.INFO, "MMDF Kafka -- JAVA CLASS PATH RUNTIME  OK");
-            LogService.getRoot().log(Level.ALL, System.getProperty("java.class.path"));
-
-            if (this.getParameterAsBoolean("run.in.thread")) {
-
-                ProgressThread thread = new ProgressThread("mmdf-kstreams:" + app_id) {
-                    @Override
-                    public void run() {
-                        try {
-                            String mmdf_config = doc.getTokenText();
-                            run_execution(props, mmdf_config, this::checkCancelled);
-                        } catch (Exception e) {
-                            throw new RuntimeException("Failed to execute MMDF" + e.getMessage());
-                        }
-                    }
+        LogService.getRoot().log(Level.INFO, "MMDF Kafka -- Connection info accepted OK ");
+        LogService.getRoot().log(Level.ALL, props.toString());
 
 
-                };
-                thread.start();
+        LogService.getRoot().log(Level.INFO, "MMDF Kafka -- JAVA CLASS PATH RUNTIME  OK");
+        LogService.getRoot().log(Level.ALL, System.getProperty("java.class.path"));
 
+        if (this.getParameterAsBoolean("run.in.thread")) {
 
-            } else {
-                String mmdf_config = doc.getTokenText();
-                run_execution(props, mmdf_config, () -> {
+            ProgressThread thread = new ProgressThread("mmdf-kstreams:" + app_id) {
+                @Override
+                public void run() {
                     try {
-                        checkForStop();
-                    } catch (ProcessStoppedException e) {
-                        throw new RuntimeException(e);
+                        String mmdf_config = doc.getTokenText();
+                        run_execution(props, mmdf_config, this::checkCancelled);
+                    } catch (Exception e) {
+                        throw new RuntimeException("Failed to execute MMDF" + e.getMessage());
                     }
-                });
-            }
+                }
+
+
+            };
+            thread.start();
+
+
+        } else {
+            String mmdf_config = doc.getTokenText();
+            run_execution(props, mmdf_config, () -> {
+                try {
+                    checkForStop();
+                } catch (ProcessStoppedException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
     }
 
